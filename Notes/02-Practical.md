@@ -4,7 +4,7 @@
 2. As a student, I need to be able to enroll from lecture and practical myself so I can change my mind about my study.
 3. As a teacher, I need to be able to enroll a student to my lecture or practical so I can control the capacity and the schedule of the course.
 4. TODO
-5. As a study department officer, I need to be able to enroll and unenroll a student to specific lecture and practical so I can handle student eligible individual needs.
+5. As a study department officer, I need to be able to enroll and unenroll a student from a specific lecture and practical so I can handle student eligible individual needs.
 6. As a manager, I need to be able to view statistical reports (even going back to history) so I can improve the course in the future.
 7. As a teacher, I need to be able to set the enrolment conditions to my course so I can I specify the subset of students for which is the course aim at.
 8. As a teacher, I need to be able (communication) TODO
