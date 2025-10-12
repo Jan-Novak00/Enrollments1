@@ -1,4 +1,3 @@
-## Důležité upozornění:
-Nahrávejte prosím své vypracované feature breakdown jako samostatný .md a dejte mu strukturu podle souboru uvedeném v prezentaci z druhého cvičení.
+You will find list of all features [here](feature_breakdown.md).
 
-[Feačury vybírejte odsud](https://github.com/Jan-Novak00/Enrollments1/blob/main/Notes/02-Practical.md)
+You will find breakdown of all core features [here](Enrollments_feature_breakdown.md).
