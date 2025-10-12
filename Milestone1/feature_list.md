@@ -1,0 +1,21 @@
+## Features
+1. As a student, I need to be able to enroll myself to specific lecture and practical so I can join the course.
+2. As a student, I need to be able to unenroll from lecture and practical myself so I can change my mind about my study.
+3. As a teacher, I need to be able to enroll a student to my lecture or practical so I can control the capacity and the schedule of the course.
+4. As a study department officer, I need to be able to check whether a student meets the enrollment conditions for a specific course so that I can approve or reject the enrollment request.
+5. As a study department officer, I need to be able to enroll and unenroll students from specific course so that I can handle eligible students’ individual needs.
+6. As a manager, I need to be able to view statistical reports (even going back to history) so I can improve the course in the future.
+7. As a teacher, I need to be able to set the enrolment conditions to my course so I can I specify the subset of students for which is the course aim at.
+8. As a teacher, I need to be able communitcate with students of my pracical/lecture, so I can reliably inform the students about changes in the course.
+
+## Feature classification
+1. core
+    - 1 -> core feature, because it is the main feature of this part of the application
+    - 2 -> core feature, because students need to have a choice to opt out from the course 
+    - 5 -> core feature, because student department needs to have an ability to manage students in edge cases, where the system would not be able to automaticaly allow student to enroll/unenroll
+    - 7 -> core feature, because the teacher needs to automatically filter students
+2. auxiliary
+    - 8 -> auxiliary feature, because user can use an external communication channel
+    - 6 -> auxiliary feature, first the study depatment needs to set up courses, than they can improve them
+    - 3 -> auxiliary feature, it can be handled with cooperation of study department
+    - 4 -> auxiliary feature, beacuse first the study department needs to a be able to enroll and unenroll students
