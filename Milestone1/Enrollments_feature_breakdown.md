@@ -116,6 +116,11 @@ As a student, I need to be able to cancel my enrolment to lecture and practical 
 - fetch data for concrete lecture or practical (call API of schedule module)
 - propagete information about student enrolment cancallation (update database)
 
+##### Cancel enrolment validation
+- check, if student can cancel enrolment (e.g. passed the date to which studnet can cancel enrolment by its own)
+- allow to set cancel enrolment conditions for students (by study department officer)
+- allow student to see cancel enrolement conditions
+
 ## Feature: Student Enrollment Management
 As a study department officer, I need to be able to enroll and unenroll students from a course so that I can handle eligible student's individual needs.
 
