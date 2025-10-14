@@ -169,7 +169,7 @@ As a study department officer, I need to be able to enroll and unenroll students
 
 #### Data search resposibilities
 - search in the list of students
-- search int the list of courses
+- search in the list of courses
 
 #### Notification responsibilities
 - notify student through the communication channel about the enrollment
@@ -210,7 +210,7 @@ As a teacher, I need to be able to set the enrolment conditions to my course so 
 - fetch student attributes for preview/evaluation
 
 #### Condition validation and enforcement responsibilities
-- validate condition input (dates, numeric ranges, course refs, etc.)
+- validate condition input (dates, numeric ranges, course refs)
 - evaluate whether a student satisfies a single condition
 - combine multiple conditions
 - enforce conditions on enrollment
