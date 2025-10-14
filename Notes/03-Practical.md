@@ -1,0 +1,91 @@
+# Practical 3
+## Architecture Decomposition
+- Business sub-domains:
+    - *Enrolment*
+        - Change displayed UI based on click "zapsat"
+    - *Statical Report Creator*
+    - *Commication platform*
+        - Sign up a student to a mailing list to get informed about being signed up for a course
+        - notify student through the communication channel about the enrollment
+        - notify student through the communication channel about the unenrollment
+
+- Dependency
+    - basic presentation:
+        - Display available system features
+
+- Technical layers:
+    1. *Presentation*
+        - Display option to search for a course
+        - Display a list of courses with a specific name to a student
+        - Display available lecture and practical tickets to a student
+        - Display a message to a student
+        - display student schedule (call API of schedule module)
+        - display lecture or practical detail (contains cancel enrollment button for lecture or practical to which the student is enrolled)
+        - display enrolment cancellation confirmation message
+        - display success message about enrolment cancellation
+        - display error message about enrolment cancellation
+        - display study department dashboard
+        - display list of students
+        - display student information
+        - display list of courses a given student is enrolled to
+        - display option "Enroll student to a course"
+        - display enrollment form
+        - display available course lectures and practicals
+        - display option to unenroll the course
+        - display teacher dashboard
+        - display list of teacher’s courses and course management options
+        - display enrolment conditions option
+        - display condition editor UI with:
+          - existing conditions
+          - available condition types and explanations
+          - forms for each condition type
+          - preview button and results section
+          - exception management (allow/block students)
+          - save/cancel actions
+        - display validation errors and guidance
+        - display confirmation after saving conditions
+    2. *Business*
+        - notify student through the communication channel about the enrollment
+        - notify student through the communication channel about the unenrollment
+        - Handle user selection of different UI elements
+        - Allow selecting one lecture and one practical from a list of all available tickets
+        - Check whether a specific lecture or practical has free space for one more attendee
+        - Increase the number of attending students in a lecture or pracitcal by one
+        - Add a student to a list of signed up students for a lecture and/or practical
+        - Add a student to the end of a waiting queue for a lecture or practical by their identifier
+        - Automatically sign up the first student in a waiting list to the ticket they're waiting for when there is free space
+        - Sign up a student to a mailing list to get informed about being signed up for a course
+        - Add a new course to the student's list of courses
+        - Raise the number of student's potential credits for a semester by a specific amount
+        - check, if student can cancel enrolment (e.g. passed the date to which studnet can cancel enrolment by its own)
+        - allow to set cancel enrolment conditions for students (by study department officer)
+        - allow student to see cancel enrolement conditions
+        - validate condition input (dates, numeric ranges, course refs)
+        - evaluate whether a student satisfies a single condition
+        - combine multiple conditions
+        - enforce conditions on enrollment
+    3. *Persistance*
+        - Use SSO to allow students to log in
+        - Only allow authenticated students to enroll in courses
+        - Contact database storing information about courses
+        - Perform a search query for a course with a specific name
+        - End connection with a database
+        - Fetch a list of courses matching a search query
+        - Fetch all available tickets for a course
+        - Acquire an exclusive write lock for a specific lecture or practical while manipulating it
+        - Free a write lock on a specific lecture or practical
+        - Get a student's unique identifier from their profile
+        - Get a student's position in a waiting list
+        - fetch data for concrete lecture or practical (call API of schedule module)
+        - propagete information about student enrolment cancallation (update database)
+        - fetch and cache data about the student from the database
+        - fetch and cache a list of students in the database
+        - fetch and cache a list of available courses in the database
+        - store data about unenrollment for a given student
+        - store data about new enrollment for a given student
+        - fetch and cache the data about a course
+        - search in the list of students
+        - search in the list of courses
+        - fetch current enrolment conditions
+        - fetch available condition types and parameter metadata
+        - fetch student attributes for preview/evaluation
