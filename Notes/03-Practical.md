@@ -6,8 +6,7 @@
         - rozdělit do dvou:
             - Direct enrollment
             - enrollment Condition setter
-    - *Statical Report Creator*
-    - *Commication platform*
+    - *Communication platform*
         - Sign up a student to a mailing list to get informed about being signed up for a course
         - notify student through the communication channel about the enrollment
         - notify student through the communication channel about the unenrollment
@@ -61,7 +60,7 @@
             - preview button and results section
             - exception management (allow/block students)
             - save/cancel actions
-    3. *Business*
+    2. *Business*
         - ensure only authorized teachers can view/edit their course conditions
         - notify student through the communication channel about the enrollment
         - notify student through the communication channel about the unenrollment
@@ -83,28 +82,38 @@
         - combine multiple conditions
         - enforce conditions on enrollment
         - enforce data privacy (only authorized users see student details)
-    4. *Persistance*
-        - Use SSO to allow students to log in
-        - Only allow authenticated students to enroll in courses
-        - Contact database storing information about courses
-        - Perform a search query for a course with a specific name
-        - End connection with a database
-        - Fetch a list of courses matching a search query
-        - Fetch all available tickets for a course
-        - Acquire an exclusive write lock for a specific lecture or practical while manipulating it
-        - Free a write lock on a specific lecture or practical
-        - Get a student's unique identifier from their profile
-        - Get a student's position in a waiting list
-        - fetch data for concrete lecture or practical (call API of schedule module)
-        - propagete information about student enrollment cancallation (update database)
-        - fetch and cache data about the student from the database
-        - fetch and cache a list of students in the database
-        - fetch and cache a list of available courses in the database
-        - store data about unenrollment for a given student
-        - store data about new enrollment for a given student
-        - fetch and cache the data about a course
-        - search in the list of students
-        - search in the list of courses
-        - fetch current enrollment conditions
-        - fetch available condition types and parameter metadata
-        - fetch student attributes for preview/evaluation
+    
+    3. *Persistance*
+        Enrollment:
+        - *Authenticator* 
+            - Use SSO to allow students to log in
+            - Only allow authenticated students to enroll in courses
+
+        - *Course information manager*
+            - Fetch a list of available courses
+            - Fetch a list of courses matching a search query
+            - Fetch data about a course
+            - Fetch current enrollment conditions for a course
+            - Fetch all available tickets for a course
+            - Change the list of enrolled students
+
+        - *Student information manager*
+            - Fetch a list of all students
+            - Fetch a list of students matching a search query
+            - Store data about unenrollment from a course for a given student
+            - Store data about a new enrollment in a course for a given student
+            - Fetch data about a student
+ 
+        - *Cache*
+            - Cache a list of available couses
+            - Cache a list of students
+            - Cache data about a course
+            - Cache data about a student
+
+        - *Ticket manager*
+            - Fetch data for concrete lecture or practical (call API of schedule module)
+            - Get a student's position in a waiting list for a specific lecture or practicle
+
+        Enrollment condition editor:
+        - *Enrollment condition manager*
+            - Fetch available condition types and parameter metadata
