@@ -18,6 +18,7 @@
 
 - Technical layers:
     1. *Presentation*
+        - *Sis messenger*
         - Display a message to a student
             - display enrollment cancellation confirmation message
             - display success message about enrollment cancellation
@@ -26,6 +27,7 @@
             - display enrollment failure message
             - display validation errors and guidance
             - display confirmation after saving conditions
+        - *Dashboard presenter*
         - display dashboard
             - study department officer
             - teacher
@@ -34,6 +36,7 @@
                 - teacher and study department officer
             - display option "Enroll student to a course"
             - Display option to search for a course
+        -
         - Display available lecture and practical tickets to a student
             - je to naše, protože přednostní zápis
             - display lecture or practical detail (contains cancel enrollment button for lecture or practical to which the student is enrolled)
@@ -43,10 +46,11 @@
                 - one teacher’s courses
             - Display a list of courses
             - display enrollment form
-        -
+        - *Student information presenter*
             - display student schedule (call API of schedule module)
             - display list of students
             - display student information
+        - *Enrolment Condition manager*
         - display condition editor UI for course enrollment with:
             - existing conditions
             - available condition types and explanations
@@ -54,7 +58,7 @@
             - preview button and results section
             - exception management (allow/block students)
             - save/cancel actions
-    2. *Business*
+    3. *Business*
         - ensure only authorized teachers can view/edit their course conditions
         - notify student through the communication channel about the enrollment
         - notify student through the communication channel about the unenrollment
@@ -76,7 +80,7 @@
         - combine multiple conditions
         - enforce conditions on enrollment
         - enforce data privacy (only authorized users see student details)
-    3. *Persistance*
+    4. *Persistance*
         - Use SSO to allow students to log in
         - Only allow authenticated students to enroll in courses
         - Contact database storing information about courses
