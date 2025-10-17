@@ -61,27 +61,35 @@
             - exception management (allow/block students)
             - save/cancel actions
     2. *Business*
-        - ensure only authorized teachers can view/edit their course conditions
-        - notify student through the communication channel about the enrollment
-        - notify student through the communication channel about the unenrollment
-        - Handle user selection of different UI elements
-        - Allow selecting one lecture and one practical from a list of all available tickets
-        - Check whether a specific lecture or practical has free space for one more attendee
-        - Increase the number of attending students in a lecture or pracitcal by one
-        - Add a student to a list of signed up students for a lecture and/or practical
-        - Add a student to the end of a waiting queue for a lecture or practical by their identifier
-        - Automatically sign up the first student in a waiting list to the ticket they're waiting for when there is free space
-        - Sign up a student to a mailing list to get informed about being signed up for a course
-        - Add a new course to the student's list of courses
-        - Raise the number of student's potential credits for a semester by a specific amount
-        - check, if student can cancel enrollment (e.g. passed the date to which studnet can cancel enrollment by its own)
-        - allow to set cancel enrollment conditions for students (by study department officer)
-        - allow student to see cancel enrolement conditions
-        - validate condition input (dates, numeric ranges, course refs)
-        - evaluate whether a student satisfies a single condition
-        - combine multiple conditions
-        - enforce conditions on enrollment
-        - enforce data privacy (only authorized users see student details)
+        -Handle user selection of different UI elements????
+        Conditions manager
+            validate condition input (dates, numeric ranges, course refs)
+            evaluate whether a student satisfies the conditions
+            combine multiple conditions
+            enforce conditions on enrollment
+        Cancellation
+            check, if student can cancel enrollment (e.g. passed the date to which studnet can cancel enrollment by its own)
+            allow to set cancel enrollment conditions for students (by study department officer)
+            allow student to see cancel enrolement conditions
+        Waitlist manager
+            Add a student to the end of a waiting queue for a lecture or practical by their identifier
+            Automatically sign up the first student in a waiting list to the ticket they're waiting for when there is free space
+        Enrollment manager
+            Allow selecting one lecture and one practical from a list of all available tickets
+            Check whether a specific lecture or practical has free space for one more attendee
+            Increase the number of attending students in a lecture or pracitcal by one
+            Add a student to a list of signed up students for a lecture and/or practical
+            Raise the number of the student’s potential credits for a semester. 
+            Add a new course to the student’s list of courses.
+    
+        Notification Service
+            notify student through the communication channel about the enrollment
+            notify student through the communication channel about the unenrollment
+            Sign up a student to a mailing list to get informed about being signed up for a course
+        Access Control & Privacy
+            enforce data privacy (only authorized users see student details)
+            ensure only authorized teachers can view/edit their course conditions
+
     
     3. *Persistance*
         Enrollment:
