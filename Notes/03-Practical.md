@@ -52,7 +52,7 @@
             - display student schedule (call API of schedule module)
             - display list of students
             - display student information
-        - *Enrolment Condition manager*
+        - *Enrolment Condition displayer*
         - display condition editor UI for course enrollment with:
             - existing conditions
             - available condition types and explanations
@@ -62,38 +62,38 @@
             - save/cancel actions
     2. *Business*
         - Handle user selection of different UI elements????
-        - Conditions manager
+        - *Enrollment condition manager*
             - validate condition input (dates, numeric ranges, course refs)
             - evaluate whether a student satisfies the conditions
             - combine multiple conditions
             - enforce conditions on enrollment
-        - Cancellation
+        - *Cancellation*
             - check, if student can cancel enrollment (e.g. passed the date to which studnet can cancel enrollment by its own)
             - allow to set cancel enrollment conditions for students (by study department officer)
             - allow student to see cancel enrolement conditions
-        - Waitlist manager
+        - *Waitlist manager*
             - Add a student to the end of a waiting queue for a lecture or practical by their identifier
             - Automatically sign up the first student in a waiting list to the ticket they're waiting for when there is free space
-        - Enrollment manager
+        - *Enrollment manager*
             - Allow selecting one lecture and one practical from a list of all available tickets
             - Check whether a specific lecture or practical has free space for one more attendee
             - Increase the number of attending students in a lecture or pracitcal by one
             - Add a student to a list of signed up students for a lecture and/or practical
-            - Raise the number of the student’s potential credits for a semester. 
+            - Raise the number of the student’s potential credits for a semester.
             - Add a new course to the student’s list of courses.
-    
-        - Notification Service
+
+        - *Notification Service*
             - notify student through the communication channel about the enrollment
             - notify student through the communication channel about the unenrollment
             - Sign up a student to a mailing list to get informed about being signed up for a course
-        - Access Control & Privacy
+        - *Authenticator*
             - enforce data privacy (only authorized users see student details)
             - ensure only authorized teachers can view/edit their course conditions
 
-    
+
     3. *Persistance*
         Enrollment:
-        - *Authenticator* 
+        - *Authenticator*
             - Use SSO to allow students to log in
             - Only allow authenticated students to enroll in courses
 
@@ -111,7 +111,7 @@
             - Store data about unenrollment from a course for a given student
             - Store data about a new enrollment in a course for a given student
             - Fetch data about a student
- 
+
         - *Cache*
             - Cache a list of available couses
             - Cache a list of students
