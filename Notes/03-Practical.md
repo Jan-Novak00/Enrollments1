@@ -1,8 +1,11 @@
 # Practical 3
 ## Architecture Decomposition
 - Business sub-domains:
-    - *Enrolment*
+    - *enrollment*
         - Change displayed UI based on click "zapsat"
+        - rozdělit do dvou:
+            - Direct enrollment
+            - enrollment Condition setter
     - *Statical Report Creator*
     - *Commication platform*
         - Sign up a student to a mailing list to get informed about being signed up for a course
@@ -15,36 +18,44 @@
 
 - Technical layers:
     1. *Presentation*
-        - Display option to search for a course
-        - Display a list of courses with a specific name to a student
-        - Display available lecture and practical tickets to a student
         - Display a message to a student
-        - display student schedule (call API of schedule module)
-        - display lecture or practical detail (contains cancel enrollment button for lecture or practical to which the student is enrolled)
-        - display enrolment cancellation confirmation message
-        - display success message about enrolment cancellation
-        - display error message about enrolment cancellation
-        - display study department dashboard
-        - display list of students
-        - display student information
-        - display list of courses a given student is enrolled to
-        - display option "Enroll student to a course"
-        - display enrollment form
-        - display available course lectures and practicals
-        - display option to unenroll the course
-        - display teacher dashboard
-        - display list of teacher’s courses and course management options
-        - display enrolment conditions option
-        - display condition editor UI with:
-          - existing conditions
-          - available condition types and explanations
-          - forms for each condition type
-          - preview button and results section
-          - exception management (allow/block students)
-          - save/cancel actions
-        - display validation errors and guidance
-        - display confirmation after saving conditions
+            - display enrollment cancellation confirmation message
+            - display success message about enrollment cancellation
+            - display error message about enrollment cancellation
+            - display enrollment success message
+            - display enrollment failure message
+            - display validation errors and guidance
+            - display confirmation after saving conditions
+        - display dashboard
+            - study department officer
+            - teacher
+            - student
+            - display enrollment conditions option (set the conditions) <- this open the UI
+                - teacher and study department officer
+            - display option "Enroll student to a course"
+            - Display option to search for a course
+        - Display available lecture and practical tickets to a student
+            - je to naše, protože přednostní zápis
+            - display lecture or practical detail (contains cancel enrollment button for lecture or practical to which the student is enrolled)
+            - Display list of courses
+                - student is enrolled to
+                - with a specific name to a student
+                - one teacher’s courses
+            - Display a list of courses
+            - display enrollment form
+        -
+            - display student schedule (call API of schedule module)
+            - display list of students
+            - display student information
+        - display condition editor UI for course enrollment with:
+            - existing conditions
+            - available condition types and explanations
+            - forms for each condition type
+            - preview button and results section
+            - exception management (allow/block students)
+            - save/cancel actions
     2. *Business*
+        - ensure only authorized teachers can view/edit their course conditions
         - notify student through the communication channel about the enrollment
         - notify student through the communication channel about the unenrollment
         - Handle user selection of different UI elements
@@ -57,13 +68,14 @@
         - Sign up a student to a mailing list to get informed about being signed up for a course
         - Add a new course to the student's list of courses
         - Raise the number of student's potential credits for a semester by a specific amount
-        - check, if student can cancel enrolment (e.g. passed the date to which studnet can cancel enrolment by its own)
-        - allow to set cancel enrolment conditions for students (by study department officer)
+        - check, if student can cancel enrollment (e.g. passed the date to which studnet can cancel enrollment by its own)
+        - allow to set cancel enrollment conditions for students (by study department officer)
         - allow student to see cancel enrolement conditions
         - validate condition input (dates, numeric ranges, course refs)
         - evaluate whether a student satisfies a single condition
         - combine multiple conditions
         - enforce conditions on enrollment
+        - enforce data privacy (only authorized users see student details)
     3. *Persistance*
         - Use SSO to allow students to log in
         - Only allow authenticated students to enroll in courses
@@ -77,7 +89,7 @@
         - Get a student's unique identifier from their profile
         - Get a student's position in a waiting list
         - fetch data for concrete lecture or practical (call API of schedule module)
-        - propagete information about student enrolment cancallation (update database)
+        - propagete information about student enrollment cancallation (update database)
         - fetch and cache data about the student from the database
         - fetch and cache a list of students in the database
         - fetch and cache a list of available courses in the database
@@ -86,6 +98,6 @@
         - fetch and cache the data about a course
         - search in the list of students
         - search in the list of courses
-        - fetch current enrolment conditions
+        - fetch current enrollment conditions
         - fetch available condition types and parameter metadata
         - fetch student attributes for preview/evaluation
