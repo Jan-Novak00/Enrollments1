@@ -27,6 +27,7 @@
             - display enrollment failure message
             - display validation errors and guidance
             - display confirmation after saving conditions
+            - TODO + probably some features from bussiness layer
         - *Dashboard presenter*
         - display dashboard
             - study department officer
@@ -36,7 +37,8 @@
                 - teacher and study department officer
             - display option "Enroll student to a course"
             - Display option to search for a course
-        -
+            - TODO + probably some features from bussiness layer (so it will be named manager)
+        - *Courses enrolment presenter*
         - Display available lecture and practical tickets to a student
             - je to naše, protože přednostní zápis
             - display lecture or practical detail (contains cancel enrollment button for lecture or practical to which the student is enrolled)
@@ -46,6 +48,7 @@
                 - one teacher’s courses
             - Display a list of courses
             - display enrollment form
+            - TODO + probably some features from bussiness layer (so it will be named manager)
         - *Student information presenter*
             - display student schedule (call API of schedule module)
             - display list of students
