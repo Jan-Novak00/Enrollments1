@@ -216,10 +216,7 @@ As a teacher, I need to be able to set the enrolment conditions to my course so 
 - enforce conditions on enrollment
 
 #### Authorization responsibilities
-- TODO Task 2 from practicul 2 we end it there
-- ensure only authorized teachers can view/edit their course conditions
-- allow study officers to override or edit if permitted
+- ensure only authorized teachers can view/edit their course conditions allow study officers to override or edit if permitted
 
 #### Performance & privacy responsibilities
-- fetch only required student attributes
 - enforce data privacy (only authorized users see student details)
