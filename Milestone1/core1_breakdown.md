@@ -29,6 +29,9 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
     * g) If the student is dequeued from the waiting list in time:
          - The system informs the student of being signed in to the lecture/practical.
          - Continue form the step 16.
+      h) If the student is not dequeued from the waiting list befor maximum waiting time expires:
+         - The system eliminates the student form tje waiting list.
+         - The system sends and email to the student, informing them they are no longer in the waiting list.
 16. If the number of attending students was successfuly raised by one:
     * a) The system adds the student to the list of enrolled students in the lecture and/or practical.
     * b) The system adds the course to the student's list of courses.
@@ -69,6 +72,13 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
 * Fetch a list of courses matching a search query
 * Fetch all available tickets for a course
 
+##### Data store responsibilities
+* Change list of enrolled students in the database
+* Change waiting list for a given ticket in the database
+* Change student course info in the database
+* Update waiting list in the database
+* Sync student course list and list of enrolled students for a given course
+
 ##### Manipulating course attendance responsibilities
 * Acquire an exclusive write lock for a specific lecture or practical while manipulating it
 * Check whether a specific lecture or practical has free space for one more attendee
@@ -90,6 +100,7 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
 
 ##### Mailing responsibilities
 * Sign up a student to a mailing list to get informed about being signed up for a course
+* Sign up a student to a mailing list to get informed about being eliminated from the waiting list
 
 ##### Student course management responsibilities
 * Add a new course to the student's list of courses
