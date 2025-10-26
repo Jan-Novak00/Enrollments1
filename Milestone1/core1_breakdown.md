@@ -24,6 +24,11 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
     * b) The system uses this identifier to add the student onto the waiting list for the lecture and/or practical.
     * c) The student is signed up to a mailing list that will inform them should they get into the lecture and/or practical.
     * d) A message informing about the failed enrollment in the course and the student's position on the waiting list is displayed.
+    * e) The system shows student the option to set maximum waiting time.
+    * f) The system dequeues first student in the waiting list, if any student unenrolls from the course.
+    * g) If the student is dequeued from the waiting list in time:
+         - The system informs the student of being signed in to the lecture/practical.
+         - Continue form the step 16.
 16. If the number of attending students was successfuly raised by one:
     * a) The system adds the student to the list of enrolled students in the lecture and/or practical.
     * b) The system adds the course to the student's list of courses.
@@ -42,7 +47,10 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
 * Display option to search for a course
 * Display a list of courses with a specific name to a student
 * Display available lecture and practical tickets to a student
+* Display the capacity of a given ticket
 * Display a message to a student
+* Display waiting list information (position in the waiting list and maximum waiting time)
+* Display maximum waiting time option
 
 ##### Input handling responsibilities
 * Handle user selection of different UI elements
@@ -50,6 +58,7 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
 * Extract input from search box
 * Handle user selection of an item in a list
 * Allow selecting one lecture and one practical from a list of all available tickets
+* Allow user to set maximum waiting time
 
 ##### Data search responsibilities
 * Contact database storing information about courses
@@ -72,7 +81,11 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
 
 ##### Waiting list responsibilities
 * Add a student to the end of a waiting queue for a lecture or practical by their identifier
+* Set maximum waiting time to each student in the waiting list
 * Get a student's position in a waiting list
+* Dequeue student from top of the list waiting list, if any student unenrolls from the ticket
+* Update waiting list when someone leaves the list
+* Eliminate students from the waiting list if they have exceeded maximum waiting time
 * Automatically sign up the first student in a waiting list to the ticket they're waiting for when there is free space
 
 ##### Mailing responsibilities
@@ -84,3 +97,7 @@ As a student, I need to be able to enroll myself to a specific lecture and pract
 
 ##### Schedule manipulation responsibilities
 * Add a ticket to a student's schedule
+
+#### Enrollment verification responsibilities
+* Verify, that the student is not yet signed in to the course
+* Verify, that the student is allowed to enroll based on prerequisities or study status
