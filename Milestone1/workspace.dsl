@@ -129,6 +129,11 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         student -> coursePresenter "Views available courses and their info."
         coursePresenter -> courseDatabase "Requests course data."
 
+        dashboard -> coursePresenter "Delivers to the user's web browser."
+        dashboard -> studentPresenter "Delivers to the user's web browser."
+        dashboard -> conditionsPresenter "Delivers to the user's web browser."
+        dashboard -> enrollmentPresenter "Delivers to the user's web browser."
+
         
     }
 
