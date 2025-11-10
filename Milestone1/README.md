@@ -13,6 +13,7 @@ The tasks for first milestone can be group into multiple parts:
 1. C4 model
 2. Features
 3. Layer architecture draft
+4. Docs
 
 ### C4 model
 Files closely related to C4 model can be found in [C4_model subdirectory](./C4_model).
@@ -26,6 +27,9 @@ The [Core_features](./Features/Core_features) contains for each core for feature
 
 ### Layer architecture draft
 [This subdirectory](./Layer_architecture_draft) visualize our understanding of our module before we learn about C4 module on lectures. So it may be obsoleted.
+
+### Docs
+Provide documentation for our module. Specifically [here](./Docs/context.md) is describe a user story for the module.
 
 ### Display C4 model
 To display C4 model run:
