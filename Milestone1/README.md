@@ -31,7 +31,7 @@ The [Core_features](./Features/Core_features) contains for each core for feature
 ### Docs
 Provide documentation for our module. Specifically [here](./Docs/context.md) is describe a user story for the module.
 
-### Display C4 model
+## Display C4 model
 To display C4 model run:
 
 ```bash
