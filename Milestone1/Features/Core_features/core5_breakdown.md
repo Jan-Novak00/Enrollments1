@@ -1,7 +1,3 @@
-# Enrolment system
-
-## Core features and responsibilities
-
 ### Feature: Student Enrollment Management
 As a study department officer, I need to be able to enroll and unenroll students from a course so that I can handle eligible student's individual needs.
 
