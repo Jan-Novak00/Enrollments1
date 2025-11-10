@@ -11,20 +11,28 @@ to be able to visualize C4 model.
 The tasks for first milestone can be group into multiple parts:
 
 1. C4 model
+2. Features
 
 ### C4 model
 Files closely related to C4 model can be found in [C4_model subdirectory](./C4_model).
 In root in contains the main workspace.dsl, from which you can visualize the C4 model.
 Files for C3 layer are located [here](./C4_model/C3_layer).
 
+### Features
+Files related to features and responsibilities identification can be found in [Features subdirectory.](./Features)
+The [feature_list.md](./Features/feature_list.md) identifies 8 feature with their motivation and their separation on core and auxiliary (with short reasoning).
+The [Core_features](./Features/Core_features) contains for each core for feature detailed description file (coreX_breakdown.md for X feature). There are manually concatenate [here](./Features/Core_features/Enrollments_feature_breakdown.md). However this file is probably obsoleted (depends on manual synchronization with coreX_breakdown.md files).
+
+
 ### Display C4 model
 To display C4 model run:
+
 ```bash
 cd C4_model
 docker run -it --rm -p 8080:8080 -v .:/usr/local/structurizr structurizr/lite
 ```
 
-## Obsolated
+## Obsoleted
 Upozornění: nové responsibilities pro jednu feature ukládejte do samostatného souboru s danou feature, nikoli do souboru [Enrollments_feature_breakdown.md](Enrollments_feature_breakdown.md).
 
 You will find list of all features [here](feature_breakdown.md).
