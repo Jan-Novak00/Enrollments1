@@ -5,11 +5,8 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         enrollmentManager = softwareSystem "Enrollment Manager" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
             
             notificationService = container "Notification Service" "Notifies users about changes in their schedule."
-            waitingListManager = container "Waiting List Manager" "Manages waiting list - adds new students, removes expired waiting students, pops students when they can enroll. Updates waiting lists."
-            ticketManager = container "Ticket Manager" "Manages course tickets."
-            enrollmentAPI = container "Enrollment API" "API for enrollment and unenrollment."
+            enrollmentAPI = container "Enrollment API" "API for ticket managment. Manages enrollment, unenrollment and waiting lists."
             conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions."
-            conditionsChecker = container "Conditions Checker" "Checks conditions."
             statisticsEngine = container "Statistics Engine" "Calculates course statistics."
 
             authenticator = container "Authenticator" "Authenticates the user."
@@ -60,9 +57,9 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         maneger = person "Maneger" "Manages courses."
 
         # relationships between users and HealthTracker
-        student -> dashboard "Uses dashboard to enroll in and unenroll from courses, view their enrollments and sign up to waiting lists."
-        teacher -> dashboard "Uses dashboard to set enrollment conditions for their course and enroll and unenroll students."
-        studyDepartmentOfficer -> dashboard "Uses dashboard to enroll and unenroll students in exceptional situations."
+        #student -> dashboard "Uses dashboard to enroll in and unenroll from courses, view their enrollments and sign up to waiting lists."
+        #teacher -> dashboard "Uses dashboard to set enrollment conditions for their course and enroll and unenroll students."
+        #studyDepartmentOfficer -> dashboard "Uses dashboard to enroll and unenroll students in exceptional situations."
 
         # relationships between external systems and enrollmentManager
         enrollmentManager -> scheduleModule "Makes API calls to read current schedule for a course from"
@@ -82,22 +79,16 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         
         # Container relationships
         
-        waitingListManager -> notificationService "Triggeres notificiation when waiting status changes."
-        waitingListManager -> ticketManager "Requests student enrollment."
-        waitingListManager -> courseDatabase "Updates waiting list."
+        enrollmentAPI -> notificationService "Triggeres notificiation when waiting status changes."
+        enrollmentAPI -> courseDatabase "Updates waiting list."
 
-        ticketManager -> courseDatabase "Updates enrolled student list."
-        ticketManager -> studentDatabase "Updates schedule."
+        enrollmentAPI -> courseDatabase "Updates enrolled student list."
+        enrollmentAPI -> studentDatabase "Updates schedule."
+
+        enrollmentAPI -> studentDatabase "Views student data."
+        enrollmentAPI -> courseDatabase "Views conditions."
         
-        enrollmentAPI -> ticketManager "Adds or removes tickets."
-        enrollmentAPI -> conditionsChecker "Requests enrollment check."
-        enrollmentAPI -> waitingListManager "Sets waiting list."
-        
-        conditionsChecker -> enrollmentAPI "Returns result of the check."
-        conditionsChecker -> studentDatabase "Views student data."
-        conditionsChecker -> courseDatabase "Views conditions."
         conditionsManager -> courseDatabase "Sets/removes conditions."
-        
 
         authenticator -> userDatabase "Fetches authentication data."
         student -> authenticator "Requests authentication"
@@ -117,7 +108,6 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         statisticsPresenter -> statisticsEngine "Requests statistics."
         maneger -> statisticsPresenter "Views statistics."
         
-
         conditionsPresenter -> conditionsManager "Requests conditions and changes them."
         teacher -> conditionsPresenter "Sets/views conditions."
         studyDepartmentOfficer -> conditionsPresenter "Views conditions."
