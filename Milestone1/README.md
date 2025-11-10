@@ -12,6 +12,7 @@ The tasks for first milestone can be group into multiple parts:
 
 1. C4 model
 2. Features
+3. Layer architecture draft
 
 ### C4 model
 Files closely related to C4 model can be found in [C4_model subdirectory](./C4_model).
@@ -23,6 +24,8 @@ Files related to features and responsibilities identification can be found in [F
 The [feature_list.md](./Features/feature_list.md) identifies 8 feature with their motivation and their separation on core and auxiliary (with short reasoning).
 The [Core_features](./Features/Core_features) contains for each core for feature detailed description file (coreX_breakdown.md for X feature). There are manually concatenate [here](./Features/Core_features/Enrollments_feature_breakdown.md). However this file is probably obsoleted (depends on manual synchronization with coreX_breakdown.md files).
 
+### Layer architecture draft
+[This subdirectory](./Layer_architecture_draft) visualize our understanding of our module before we learn about C4 module on lectures. So it may be obsoleted.
 
 ### Display C4 model
 To display C4 model run:
