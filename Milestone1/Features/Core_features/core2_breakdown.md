@@ -1,7 +1,3 @@
-# Enrolment system
-
-## Core features and responsibilities
-
 ### Feature: Student enrolment cancellation
 As a student, I need to be able to cancel my enrolment to lecture and practical so I can change my mind about my study.
 
