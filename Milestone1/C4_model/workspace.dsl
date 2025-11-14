@@ -2,10 +2,10 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
     model {
         # software systems
-        enrollmentManager = softwareSystem "Enrollment Manager" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
+        enrollmentSystem = softwareSystem "Enrollment System" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
             
             notificationService = container "Notification Service" "Notifies users about changes in their schedule."
-            enrollmentAPI = container "Enrollment API" "API for ticket managment. Manages enrollment, unenrollment and waiting lists."
+            enrollmentManager = container "Enrollment Manager" "Conteiner for ticket managment. Manages enrollment, unenrollment and waiting lists."
             conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions."
             statisticsEngine = container "Statistics Engine" "Calculates course statistics."
 
@@ -62,31 +62,31 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         #studyDepartmentOfficer -> dashboard "Uses dashboard to enroll and unenroll students in exceptional situations."
 
         # relationships between external systems and enrollmentManager
-        enrollmentManager -> scheduleModule "Makes API calls to read current schedule for a course from"
+        enrollmentSystem -> scheduleModule "Makes API calls to read current schedule for a course from"
 
-        enrollmentManager -> studentDatabase "Reads information about students from"
+        enrollmentSystem -> studentDatabase "Reads information about students from"
 
-        enrollmentManager -> courseDatabase "Reads information about courses from"
+        enrollmentSystem -> courseDatabase "Reads information about courses from"
 
-        dashboard -> enrollmentManager "Manages enrollments on behalf of users using"
+        dashboard -> enrollmentSystem "Manages enrollments on behalf of users using"
 
-        sso -> enrollmentManager  "Verifies users' identities."
+        sso -> enrollmentSystem  "Verifies users' identities."
 
-        maneger -> enrollmentManager "Maneges available courses."
+        maneger -> enrollmentSystem "Maneges available courses."
 
         
         
         
         # Container relationships
         
-        enrollmentAPI -> notificationService "Triggeres notificiation when waiting status changes."
-        enrollmentAPI -> courseDatabase "Updates waiting list."
+        enrollmentManager -> notificationService "Triggeres notificiation when waiting status changes."
+        enrollmentManager -> courseDatabase "Updates waiting list."
 
-        enrollmentAPI -> courseDatabase "Updates enrolled student list."
-        enrollmentAPI -> studentDatabase "Updates schedule."
+        enrollmentManager -> courseDatabase "Updates enrolled student list."
+        enrollmentManager -> studentDatabase "Updates schedule."
 
-        enrollmentAPI -> studentDatabase "Views student data."
-        enrollmentAPI -> courseDatabase "Views conditions."
+        enrollmentManager -> studentDatabase "Views student data."
+        enrollmentManager -> courseDatabase "Views conditions."
         
         conditionsManager -> courseDatabase "Sets/removes conditions."
 
@@ -99,7 +99,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         student -> sisMessenger "Views messages"
         teacher -> sisMessenger "Views messages"
 
-        enrollmentPresenter -> enrollmentAPI "Requests changes in enrollment."
+        enrollmentPresenter -> enrollmentManager "Requests changes in enrollment."
         student -> enrollmentPresenter "Enrolls (unenrolls) to (from) the course."
         teacher -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
         studyDepartmentOfficer -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
@@ -129,8 +129,8 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
     views {
 
-        systemContext enrollmentManager "enrollmentManagerSystemContextDiagram" {
-            include enrollmentManager
+        systemContext enrollmentSystem "enrollmentSystemContextDiagram" {
+            include enrollmentSystem
             include scheduleModule
             include studentDatabase
             include courseDatabase
@@ -141,7 +141,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             include studyDepartmentOfficer
             include maneger
         }
-        container enrollmentManager "enrollmentManagerContainerDiagram" {
+        container enrollmentSystem "enrollmentSystemContainerDiagram" {
             include *
             
         }
