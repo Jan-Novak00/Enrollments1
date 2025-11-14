@@ -5,9 +5,36 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         enrollmentSystem = softwareSystem "Enrollment System" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
             
             notificationService = container "Notification Service" "Notifies users about changes in their schedule."
-            enrollmentManager = container "Enrollment Manager" "Conteiner for ticket managment. Manages enrollment, unenrollment and waiting lists."
+            enrollmentManager = container "Enrollment Manager" "Conteiner for ticket managment. Manages enrollment, unenrollment and waiting lists." {
+               
+                enrollmentAPI = component "Enrollment API" "Handles requests for enrollment/unenrollment"
+                ticketCapacityHandler = component "Ticket Capacity Handler"
+                ticketStore = component "Ticket Store Adapter"¨
+                enrollmentWriter = component "Enrollment Writer"
+                scheduleWriter = component "Schedule Writer"
+
+                waitQueue = component "Wait Queue Service"
+                autoEnroll = component "Auto-Enroll Worker"
+
+                condReader = component "Condition Reader"
+                predicateLib = component "Predicate Library"
+                condEvaluator = component "Condition Evaluator"
+                condSchemaDatabase = component "Condition Schema Database" {
+                    
+                    tags "Database"
+                }       
+            }
+            
             conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions."
-            statisticsEngine = container "Statistics Engine" "Calculates course statistics."
+            statisticsEngine = container "Statistics Engine" "Calculates course statistics." {
+
+                statisticsAPI = component "Statistics API"
+                statisticsCalculator = component "Statistics calculator" "Calculates statistics"
+                statisticsLibrary = component "Statistics library" "Provides basic methods for statistical data analysis."
+                statisticsDataFetcher = component "Statistics data fetcher"
+                statisticsCache = component "Statistics cache" "Cahces statistics results"
+
+            }
 
             authenticator = container "Authenticator" "Authenticates the user."
             userDatabase = container "User database" "Contains information about all users." {
@@ -16,24 +43,72 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
             sisMessenger = container "SIS Messenger" "Allows viewing messages in SIS." {
                 tags "Front end"
+                messegeView = component "Messege view" {
+                    tags "Front end"
+                } 
+                messegeController = component "Messege controller"
+
             }
             
             enrollmentPresenter = container "Enrollment Presenter" "Presents enrollment/unenrollment options" {
                 tags "Front end"
+                courseTicketView = component "Course ticket view" {
+                    tags "Front end"
+                }
+                waitingListView = component "Waiting list view" {
+                    tags "Front end"
+                }        
+                
+                courseTicketController = component "Course ticket controller"
+                waitingListController = component "Waiting list controller"
+                
+
             }
             coursePresenter = container "Course Presenter" "Presents course info." {
                 tags "Front end"
+                courseSearchView = component "Course search" {
+                    tags "Front end"
+                }
+                courseSearchController = component "Course search controller"
+                courseOverviewView = component "Course overview" {
+                    tags "Front end"
+                }
+                courseOverviewController = component "Course overview controller"
             }
 
             statisticsPresenter = container "Statistics Presenter" "Presents course statistics" {
                 tags "Front end"
+                statisticsQueryView = component "Course statistics query view"{
+                    tags "Front end"
+                }  
+                statisticsQueryController = component "Course statistics query controller"
             }
 
             conditionsPresenter = container "Conditions Presenter" "Presents conditions options" {
                 tags "Front end"
+                conditionSetterView = component "Condition setter view"{
+                    tags "Front end"
+                }  
+                conditionListView = component "Condition list view"{
+                    tags "Front end"
+                }
+                conditionSetterContoller = component "Condition setter contoller"
+                conditionListController = component "Condition list controller"
+
             }
             studentPresenter = container "Student Information Presenter" "Presents information about student" {
                 tags "Front end"
+                
+                studentInfoView = component "Student info view" {
+                    tags "Front end"
+                }  
+                studentInfoController = component "Student info component"
+                
+                studentSearchView = component "Student search view"{
+                    tags "Front end"
+                } 
+                studentSearchController = component "Student search component"
+
             }
 
 
@@ -79,7 +154,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         
         # Container relationships
         
-        enrollmentManager -> notificationService "Triggeres notificiation when waiting status changes."
+        autoEnroll -> notificationService "Triggeres notificiation when waiting status changes."
         enrollmentManager -> courseDatabase "Updates waiting list."
 
         enrollmentManager -> courseDatabase "Updates enrolled student list."
@@ -99,13 +174,13 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         student -> sisMessenger "Views messages"
         teacher -> sisMessenger "Views messages"
 
-        enrollmentPresenter -> enrollmentManager "Requests changes in enrollment."
+        enrollmentPresenter -> enrollmentAPI "Requests changes in enrollment."
         student -> enrollmentPresenter "Enrolls (unenrolls) to (from) the course."
         teacher -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
         studyDepartmentOfficer -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
         
-        statisticsEngine -> courseDatabase "Calculates statistics."
-        statisticsPresenter -> statisticsEngine "Requests statistics."
+        statisticsDataFetcher -> courseDatabase "Fetches data"
+        statisticsQueryController -> statisticsAPI "Requests statistics."
         maneger -> statisticsPresenter "Views statistics."
         
         conditionsPresenter -> conditionsManager "Requests conditions and changes them."
@@ -123,8 +198,86 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dashboard -> studentPresenter "Delivers to the user's web browser."
         dashboard -> conditionsPresenter "Delivers to the user's web browser."
         dashboard -> enrollmentPresenter "Delivers to the user's web browser."
+        dashboard -> sisMessenger "Delivers to the users's web browser."
+
 
         
+        ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
+        ticketCapacityHandler -> enrollmentWriter "On success: update enrolled roster"
+        ticketCapacityHandler -> scheduleWriter "On success: update schedule"
+        ticketCapacityHandler -> autoEnroll "On full: push to waiting list"
+        ticketStore -> courseDatabase "R/W ticket records"
+        enrollmentWriter -> studentDatabase "Update student course list"
+        scheduleWriter -> studentDatabase "Update schedule entries"
+        
+        # Enrollemnt Manager components
+        autoEnroll -> waitQueue "Update waiting list"
+        waitQueue -> courseDatabase "Persist queue state"
+        autoEnroll -> ticketStore "Update tickets when pop."
+
+        enrollmentAPI -> ticketCapacityHandler "Request (un)enrollment."
+        enrollmentAPI -> autoEnroll "Request removal from waiting list."
+        ticketCapacityHandler -> autoEnroll "Request waiting list update when user unenrolls."
+
+
+        ticketCapacityHandler -> condEvaluator "Check conditions"
+        condReader -> condSchemaDatabase "Fetch conditions."
+        condEvaluator -> condReader "Fetch condition graph"
+        condEvaluator -> predicateLib "Invoke predicates (GPA, credits, role, time windows)"
+        condEvaluator -> studentDatabase "Fetch student attributes"
+        condSchemaDatabase -> courseDatabase "Fetch course conditions"
+
+
+        # Statistics Engine
+        statisticsAPI -> statisticsCalculator "Requests calculation"
+        statisticsCalculator -> statisticsDataFetcher "Requests data fetch"
+        statisticsLibrary -> statisticsCalculator "Provides statistical methods."
+        statisticsCalculator -> statisticsCache "Updates"
+        statisticsCalculator -> statisticsCache "Reads"
+
+        # Enrollment Presenter
+        waitingListController -> enrollmentManager "Requests waiting list update"
+        courseTicketController -> enrollmentManager "Requests (un)enrollment"
+        waitingListView -> waitingListController "Handles waiting list requests"
+        courseTicketView -> courseTicketController "Handles (un)enrollment requests."
+
+        dashboard -> courseTicketView "delivers"
+        dashboard -> waitingListView "delivers"
+
+        # Course Presenter
+        dashboard -> courseSearchView "delivers"
+        dashboard -> courseOverviewView "delivers
+        courseSearchController -> courseDatabase "Fetches available courses based on user filters."
+        courseSearchView -> courseSearchController "Requests course list"
+        courseOverviewView -> courseOverviewController "Requests course data"
+        courseOverviewController -> courseDatabase "Fetches course data"
+
+        # Statistics view
+        statisticsQueryView -> statisticsQueryController "Sets statistics to be calculated"
+
+        # Condition Presenter
+        conditionListView -> conditionListController "Request conditions"
+        conditionListController -> courseDatabase "Request conditions info"
+        conditionSetterContoller -> conditionsManager "Requests conditions change"
+        conditionSetterView -> conditionSetterContoller "Requests condition change"
+        dashboard -> conditionListView "Delivers"
+        dashboard -> conditionSetterView "Delivers"
+
+        # Student Presenter
+        studentInfoView -> studentInfoController "Gets data about student"
+        studentInfoController -> studentDatabase "Fetches data from databse"
+        studentSearchView -> studentSearchController "Gets data about students"
+        studentSearchController -> studentDatabase "Fetches data about students"
+        dashboard  -> studentInfoView "Delivers"
+        dashboard -> studentSearchView "Delivers"
+
+        # SIS Messenger
+        dashboard -> messegeView "Delivers"
+        messegeView -> messegeController "Gets messeges"
+        notificationService -> messegeController "Pushes messeges"
+        
+
+
     }
 
     views {
@@ -143,9 +296,42 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         }
         container enrollmentSystem "enrollmentSystemContainerDiagram" {
             include *
+            exclude courseTicketView
+            exclude waitingListView
+            exclude courseSearchView
+            exclude courseOverviewView
+            exclude conditionListView
+            exclude conditionSetterView
+            exclude studentInfoView
+            exclude studentSearchView
+            exclude messageView
             
         }
+        component enrollmentManager "enrollmentManagerComponeentDiagram" {
+            include *
+        }
+        component statisticsEngine "statisticsEnginComponentDiagram" {
+            include *
+        }
+        component enrollmentPresenter "enrollmentPresenterComponentDigram" {
+            include *
+        }
+        component coursePresenter "coursePresenterComponentDiagram" {
+            include *
+        }
         
+        component statisticsPresenter "statisticsPresenterComponentDiagram" {
+            include *
+        }
+        component conditionsPresenter "conditionsPresenterComponentDiagram" {
+            include *
+        }
+        component studentPresenter "studentPresenterComponentDiagram" {
+            include *
+        }
+        component sisMessenger "sisMessengerComponentDiagram" {
+            include *
+        }
 
         theme default
 
