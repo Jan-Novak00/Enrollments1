@@ -4,7 +4,16 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         # software systems
         enrollmentSystem = softwareSystem "Enrollment System" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
             
-            notificationService = container "Notification Service" "Notifies users about changes in their schedule."
+            notificationService = container "Notification Service" "Notifies users about changes in their schedule." {
+                templateEngine = component "Template Engine"
+                channelDispatcher = component "Channel Dispatcher"
+                mailingListManager = component "Mailing List Manager"
+                notificationDatabase = component "Notification Database" "Notification view on student database."{
+                    tags "Database"
+                }
+                
+            }
+            
             enrollmentManager = container "Enrollment Manager" "Conteiner for ticket managment. Manages enrollment, unenrollment and waiting lists." {
                
                 enrollmentAPI = component "Enrollment API" "Handles requests for enrollment/unenrollment"
@@ -25,7 +34,13 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 }       
             }
             
-            conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions."
+            conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions." {
+                conditionAPI = component "Condition Management API"
+                conditionSchemaDatabase = component "Condition Schema" {
+                    tags "Database"
+                }
+                
+            }
             statisticsEngine = container "Statistics Engine" "Calculates course statistics." {
 
                 statisticsAPI = component "Statistics API"
@@ -39,10 +54,10 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
             sisMessenger = container "SIS Messenger" "Allows viewing messages in SIS." {
                 tags "Front end"
-                messegeView = component "Messege view" {
+                messageView = component "Message view" {
                     tags "Front end"
                 } 
-                messegeController = component "Messege controller"
+                messageController = component "Message controller"
 
             }
             
@@ -145,6 +160,12 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         maneger -> enrollmentSystem "Maneges available courses."
 
+        sso -> sisMessenger "Verifies user"
+        sso -> enrollmentPresenter "Verifies user"
+        sso -> conditionsPresenter "Verifies user"
+        sso -> statisticsPresenter "Verifies user"
+        sso -> studentPresenter "Verifies user"
+
         
         
         
@@ -159,7 +180,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         enrollmentManager -> studentDatabase "Views student data."
         enrollmentManager -> courseDatabase "Views conditions."
         
-        conditionsManager -> courseDatabase "Sets/removes conditions."
+        conditionSchemaDatabase -> courseDatabase "Sets/removes conditions."
 
         notificationService -> sisMessenger "Updates messages"
         student -> sisMessenger "Views messages"
@@ -174,7 +195,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         statisticsQueryController -> statisticsAPI "Requests statistics."
         maneger -> statisticsPresenter "Views statistics."
         
-        conditionsPresenter -> conditionsManager "Requests conditions and changes them."
+        conditionsPresenter -> conditionAPI "Requests conditions and changes them."
         teacher -> conditionsPresenter "Sets/views conditions."
         studyDepartmentOfficer -> conditionsPresenter "Views conditions."
 
@@ -248,8 +269,8 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         # Condition Presenter
         conditionListView -> conditionListController "Request conditions"
-        conditionListController -> courseDatabase "Request conditions info"
-        conditionSetterContoller -> conditionsManager "Requests conditions change"
+        conditionListController -> conditionAPI "Request conditions info"
+        conditionSetterContoller -> conditionAPI "Requests conditions change"
         conditionSetterView -> conditionSetterContoller "Requests condition change"
         dashboard -> conditionListView "Delivers"
         dashboard -> conditionSetterView "Delivers"
@@ -263,9 +284,20 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dashboard -> studentSearchView "Delivers"
 
         # SIS Messenger
-        dashboard -> messegeView "Delivers"
-        messegeView -> messegeController "Gets messeges"
-        notificationService -> messegeController "Pushes messeges"
+        dashboard -> messageView "Delivers"
+        messageView -> messageController "Gets messages"
+        notificationService -> messageController "Pushes messages"
+
+        # Notification Service
+        channelDispatcher -> templateEngine "Render message"
+        channelDispatcher -> mailingListManager "Publish to mailing lists"
+        channelDispatcher -> notificationDatabase "Write delivery logs"
+        channelDispatcher -> studentDatabase "Lookup contact addresses"
+        notificationDatabase -> studentDatabase "Stores and loads notifications and logs."
+
+        #Conditions manager
+        conditionAPI -> conditionSchemaDatabase "Create/Update/Delete condition definitions"
+        #conditionSchemaDatabase -> courseDatabase "R/W conditions"
         
 
 
@@ -321,6 +353,12 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             include *
         }
         component sisMessenger "sisMessengerComponentDiagram" {
+            include *
+        }
+        component notificationService "notificationServiceComponentDiagram" {
+            include *
+        }
+        component conditionsManager "conditionsManagerComponentDiagram" {
             include *
         }
 
