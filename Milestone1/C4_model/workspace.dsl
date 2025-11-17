@@ -36,10 +36,6 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
             }
 
-            authenticator = container "Authenticator" "Authenticates the user."
-            userDatabase = container "User database" "Contains information about all users." {
-                tags "Database"
-            }
 
             sisMessenger = container "SIS Messenger" "Allows viewing messages in SIS." {
                 tags "Front end"
@@ -164,11 +160,6 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         enrollmentManager -> courseDatabase "Views conditions."
         
         conditionsManager -> courseDatabase "Sets/removes conditions."
-
-        authenticator -> userDatabase "Fetches authentication data."
-        student -> authenticator "Requests authentication"
-        teacher -> authenticator "Requests authentication"
-        authenticator -> sso "Authenticates user"
 
         notificationService -> sisMessenger "Updates messages"
         student -> sisMessenger "Views messages"
