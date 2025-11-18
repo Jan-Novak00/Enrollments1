@@ -1,6 +1,9 @@
 workspace "EnrollmentManager workspace" "This workspace documents the architecture of the EnrollmentManager system, a part of a student information system that handles student enrollments." {
 
     model {
+
+        !docs Docs
+
         # software systems
         enrollmentSystem = softwareSystem "Enrollment System" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
             
@@ -121,7 +124,6 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 studentSearchController = component "Student search component"
 
             }
-
 
         }
 
