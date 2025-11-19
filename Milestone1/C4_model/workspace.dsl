@@ -2,8 +2,6 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
     model {
 
-        !docs Docs
-
         # software systems
         enrollmentSystem = softwareSystem "Enrollment System" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
             
@@ -17,7 +15,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 
             }
             
-            enrollmentManager = container "Enrollment Manager" "Conteiner for ticket managment. Manages enrollment, unenrollment and waiting lists." {
+            enrollmentManager = container "Enrollment Manager" "Container for ticket management. Manages enrollment, unenrollment and waiting lists." {
                
                 enrollmentAPI = component "Enrollment API" "Handles requests for enrollment/unenrollment"
                 ticketCapacityHandler = component "Ticket Capacity Handler"
@@ -300,9 +298,54 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         #Conditions manager
         conditionAPI -> conditionSchemaDatabase "Create/Update/Delete condition definitions"
         #conditionSchemaDatabase -> courseDatabase "R/W conditions"
-        
 
 
+        deploymentEnvironment "Production" {
+            deploymentNode "User's web browser" "" "" {
+                enrollmentPresenterInstance = containerInstance enrollmentPresenter
+                coursePresenterInstance = containerInstance coursePresenter
+                statisticsPresenterInstance = containerInstance statisticsPresenter
+                conditionsPresenterInstance = containerInstance conditionsPresenter
+                studentPresenterInstance = containerInstance studentPresenter
+                sisMessengerInstance = containerInstance sisMessenger
+            }
+
+            deploymentNode "Notification server" "" "" {
+                notificationServiceInstance = containerInstance notificationService
+            }
+
+            deploymentNode "Enrollment server" "" "" {
+                enrollmentManagerInstance = containerInstance enrollmentManager
+            }
+
+            deploymentNode "Conditions server" "" "" {
+                conditionsManagerInstance = containerInstance conditionsManager
+            }
+
+            deploymentNode "Statistics server" "" "" {
+                statisticsEngineInstance = containerInstance statisticsEngine
+            }
+        }
+
+        deploymentEnvironment "Development" {
+            deploymentNode "User's web browser" "" "" {
+                enrollmentPresenterInstance = containerInstance enrollmentPresenter
+                coursePresenterInstance = containerInstance coursePresenter
+                statisticsPresenterInstance = containerInstance statisticsPresenter
+                conditionsPresenterInstance = containerInstance conditionsPresenter
+                studentPresenterInstance = containerInstance studentPresenter
+                sisMessengerInstance = containerInstance sisMessenger
+            }
+
+            deploymentNode "Backend server" "" "" {
+                notificationServiceInstance = containerInstance notificationService
+                enrollmentManagerInstance = containerInstance enrollmentManager
+                conditionsManagerInstance = containerInstance conditionsManager
+                statisticsEngineInstance = containerInstance statisticsEngine
+            }
+        }
+
+        !docs Docs
     }
 
     views {
