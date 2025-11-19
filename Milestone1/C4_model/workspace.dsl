@@ -514,6 +514,14 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
             include *
         }
 
+        deployment enrollmentSystem "Production" "Production_Deployment"   {
+            include *
+        }
+
+        deployment enrollmentSystem "Development" "Development_Deployment"   {
+            include *
+        }
+
         theme default
 
         styles {
