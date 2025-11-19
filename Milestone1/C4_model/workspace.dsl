@@ -3,7 +3,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
     model {
         # software systems
         enrollmentManager = softwareSystem "Enrollment Manager" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
-            
+
             notificationService = container "Notification Service" "Notifies users about changes in their schedule."
             enrollmentAPI = container "Enrollment API" "API for ticket managment. Manages enrollment, unenrollment and waiting lists."
             conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions."
@@ -17,7 +17,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             sisMessenger = container "SIS Messenger" "Allows viewing messages in SIS." {
                 tags "Front end"
             }
-            
+
             enrollmentPresenter = container "Enrollment Presenter" "Presents enrollment/unenrollment options" {
                 tags "Front end"
             }
@@ -74,11 +74,11 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         maneger -> enrollmentManager "Maneges available courses."
 
-        
-        
-        
+
+
+
         # Container relationships
-        
+
         enrollmentAPI -> notificationService "Triggeres notificiation when waiting status changes."
         enrollmentAPI -> courseDatabase "Updates waiting list."
 
@@ -87,7 +87,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         enrollmentAPI -> studentDatabase "Views student data."
         enrollmentAPI -> courseDatabase "Views conditions."
-        
+
         conditionsManager -> courseDatabase "Sets/removes conditions."
 
         authenticator -> userDatabase "Fetches authentication data."
@@ -103,11 +103,11 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         student -> enrollmentPresenter "Enrolls (unenrolls) to (from) the course."
         teacher -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
         studyDepartmentOfficer -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
-        
+
         statisticsEngine -> courseDatabase "Calculates statistics."
         statisticsPresenter -> statisticsEngine "Requests statistics."
         maneger -> statisticsPresenter "Views statistics."
-        
+
         conditionsPresenter -> conditionsManager "Requests conditions and changes them."
         teacher -> conditionsPresenter "Sets/views conditions."
         studyDepartmentOfficer -> conditionsPresenter "Views conditions."
@@ -124,7 +124,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dashboard -> conditionsPresenter "Delivers to the user's web browser."
         dashboard -> enrollmentPresenter "Delivers to the user's web browser."
 
-        
+
     }
 
     views {
@@ -143,9 +143,22 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         }
         container enrollmentManager "enrollmentManagerContainerDiagram" {
             include *
-            
+
         }
-        
+
+        dynamic EnrollmentManager {
+            title "Core feature 1: Student enroll himself in a course"
+            description "The student meets all course conditions and the course capacity has not yet been filled."
+            student -> enrollmentPresenter "Requests enrollment in a course"
+            enrollmentPresenter -> enrollmentAPI "Requests the student enrollment in the course"
+            enrollmentAPI -> courseDatabase "Fetches the course enrollment conditions"
+            enrollmentAPI -> courseDatabase "Updates enrolled student list"
+            enrollmentAPI -> studentDatabase "Adds the course in the student's course list"
+            enrollmentAPI -> notificationService "Triggers notification of the student successful enrollment into the course"
+            notificationService -> sisMessenger "Requests to show enrollment success message to the student"
+            autoLayout lr
+        }
+
 
         theme default
 
