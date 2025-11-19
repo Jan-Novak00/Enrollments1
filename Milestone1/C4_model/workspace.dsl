@@ -4,7 +4,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         # software systems
         enrollmentSystem = softwareSystem "Enrollment System" "Handles student enrollments and unenrollments, setting and checking enrollment conditions and managing waiting lists."  {
-            
+
             notificationService = container "Notification Service" "Notifies users about changes in their schedule." {
                 templateEngine = component "Template Engine"
                 channelDispatcher = component "Channel Dispatcher"
@@ -12,7 +12,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 notificationDatabase = component "Notification Database" "Notification view on student database."{
                     tags "Database"
                 }
-                
+
             }
             
             enrollmentManager = container "Enrollment Manager" "Container for ticket management. Manages enrollment, unenrollment and waiting lists." {
@@ -30,17 +30,17 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 predicateLib = component "Predicate Library"
                 condEvaluator = component "Condition Evaluator"
                 condSchemaDatabase = component "Condition Schema Database" {
-                    
+
                     tags "Database"
-                }       
+                }
             }
-            
+
             conditionsManager = container "Conditions Manager" "Allows setting and removing enrollment conditions." {
                 conditionAPI = component "Condition Management API"
                 conditionSchemaDatabase = component "Condition Schema" {
                     tags "Database"
                 }
-                
+
             }
             statisticsEngine = container "Statistics Engine" "Calculates course statistics." {
 
@@ -57,11 +57,11 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 tags "Front end"
                 messageView = component "Message view" {
                     tags "Front end"
-                } 
+                }
                 messageController = component "Message controller"
 
             }
-            
+
             enrollmentPresenter = container "Enrollment Presenter" "Presents enrollment/unenrollment options" {
                 tags "Front end"
                 courseTicketView = component "Course ticket view" {
@@ -69,11 +69,11 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 }
                 waitingListView = component "Waiting list view" {
                     tags "Front end"
-                }        
-                
+                }
+
                 courseTicketController = component "Course ticket controller"
                 waitingListController = component "Waiting list controller"
-                
+
 
             }
             coursePresenter = container "Course Presenter" "Presents course info." {
@@ -92,7 +92,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 tags "Front end"
                 statisticsQueryView = component "Course statistics query view"{
                     tags "Front end"
-                }  
+                }
                 statisticsQueryController = component "Course statistics query controller"
             }
 
@@ -100,7 +100,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
                 tags "Front end"
                 conditionSetterView = component "Condition setter view"{
                     tags "Front end"
-                }  
+                }
                 conditionListView = component "Condition list view"{
                     tags "Front end"
                 }
@@ -110,15 +110,15 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             }
             studentPresenter = container "Student Information Presenter" "Presents information about student" {
                 tags "Front end"
-                
+
                 studentInfoView = component "Student info view" {
                     tags "Front end"
-                }  
+                }
                 studentInfoController = component "Student info component"
-                
+
                 studentSearchView = component "Student search view"{
                     tags "Front end"
-                } 
+                }
                 studentSearchController = component "Student search component"
 
             }
@@ -166,11 +166,10 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         sso -> statisticsPresenter "Verifies user"
         sso -> studentPresenter "Verifies user"
 
-        
-        
-        
+
+
+
         # Container relationships
-        
         autoEnroll -> notificationService "Triggeres notificiation when waiting status changes."
         enrollmentManager -> courseDatabase "Updates waiting list."
 
@@ -179,7 +178,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         enrollmentManager -> studentDatabase "Views student data."
         enrollmentManager -> courseDatabase "Views conditions."
-        
+
         conditionSchemaDatabase -> courseDatabase "Sets/removes conditions."
 
         notificationService -> sisMessenger "Updates messages"
@@ -190,11 +189,11 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         student -> enrollmentPresenter "Enrolls (unenrolls) to (from) the course."
         teacher -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
         studyDepartmentOfficer -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
-        
+
         statisticsDataFetcher -> courseDatabase "Fetches data"
         statisticsQueryController -> statisticsAPI "Requests statistics."
         maneger -> statisticsPresenter "Views statistics."
-        
+
         conditionsPresenter -> conditionAPI "Requests conditions and changes them."
         teacher -> conditionsPresenter "Sets/views conditions."
         studyDepartmentOfficer -> conditionsPresenter "Views conditions."
@@ -212,16 +211,14 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dashboard -> enrollmentPresenter "Delivers to the user's web browser."
         dashboard -> sisMessenger "Delivers to the users's web browser."
 
-
-        
-        ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
+ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
         ticketCapacityHandler -> enrollmentWriter "On success: update enrolled roster"
         ticketCapacityHandler -> scheduleWriter "On success: update schedule"
         ticketCapacityHandler -> autoEnroll "On full: push to waiting list"
         ticketStore -> courseDatabase "R/W ticket records"
         enrollmentWriter -> studentDatabase "Update student course list"
         scheduleWriter -> studentDatabase "Update schedule entries"
-        
+
         # Enrollemnt Manager components
         autoEnroll -> waitQueue "Update waiting list"
         waitQueue -> courseDatabase "Persist queue state"
@@ -373,8 +370,119 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             exclude studentInfoView
             exclude studentSearchView
             exclude messageView
-            
+
         }
+
+        dynamic enrollmentSystem {
+            title "Core feature 1: Student enrolls himself in a course"
+            description "The student meets all course conditions and the course capacity has not yet been filled."
+            // TODO
+            // authentication
+            enrollmentPresenter -> enrollmentManager "Requests the student enrollment in the course"
+            enrollmentManager -> courseDatabase "Fetches the course enrollment conditions"
+            enrollmentManager -> courseDatabase "Updates enrolled student list"
+            enrollmentManager -> studentDatabase "Adds the course in the student's course list"
+            enrollmentManager -> notificationService "Triggers notification about the student successful enrollment into the course"
+            notificationService -> sisMessenger "Requests to show enrollment success message to the student"
+            autoLayout lr
+        }
+
+        dynamic enrollmentSystem {
+            title "Core feature 2: Student cancels own enrollment in a course"
+            description "The student requests course enrollment cancellation for a course, which enrollment cancellation conditions has been met."
+            // TODO
+            // authentication
+            student -> enrollmentPresenter "Requests enrollment course cancellation"
+            enrollmentPresenter -> enrollmentManager "Requests the student enrollment course cancellation"
+            enrollmentManager -> notificationService "Requests confirmation message about course enrollment cancellation"
+            notificationService -> sisMessenger "Requests to show confirmation message about course enrollment cancellation message to the student"
+            student -> enrollmentPresenter "Confirms enrollment course cancellation"
+            enrollmentPresenter -> enrollmentManager "Confirms the student enrollment course cancellation"
+            enrollmentManager -> courseDatabase "Fetches the course enrollment cancellation conditions"
+            enrollmentManager -> courseDatabase "Updates enrolled student list"
+            enrollmentManager -> studentDatabase "Remove the course from the student's course list"
+            enrollmentManager -> notificationService "Triggers notification about the student successful course enrollment cancellation"
+            notificationService -> sisMessenger "Requests to show course enrollment cancellation success message to the student"
+            autoLayout lr
+        }
+
+        dynamic enrollmentSystem {
+            title "Core feature 5: Study department officer enrolls a student"
+            // TODO
+            // authentication
+            studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a student in a course"
+            enrollmentPresenter -> enrollmentManager "Requests a student enrollment for a course"
+            enrollmentManager -> studentDatabase "Requests a list of students"
+            # TODO
+            # tady nesedí, asi enrollmentManager ovlivní enrollmentPresenter
+            # avšak z L2 se tohle neděje
+            studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a concrete student in a course"
+            enrollmentPresenter -> enrollmentManager "Requests enrollment of the student in a course"
+            enrollmentManager -> studentDatabase "Requests the student data"
+            # TODO
+            # stejný problém jako předchozí todo-čko
+            # TODO
+            # někde by se mělo stát
+            # enrollmentManager -> courseDatabaser "Fetches data about enrollable courses"
+            # avšak v feature_breakdown není definováno kdy
+            studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of the student in a concrete course"
+            enrollmentPresenter -> enrollmentManager "Requests enrollment of the student in the course"
+            enrollmentManager -> notificationService "Requests confirmation message about course enrollment"
+            notificationService -> sisMessenger "Requests to show confirmation message about course enrollment to the study department officer"
+            studyDepartmentOfficer -> enrollmentPresenter "Confirms course enrollment"
+            enrollmentPresenter -> enrollmentManager "Requests (confirmed) enrollment of the student in the course"
+            enrollmentManager -> courseDatabase "Update course enrollment list"
+            enrollmentManager -> studentDatabase "Update enrolled courses for the student"
+            enrollmentManager -> notificationService "Requests message about the course enrollment for the student"
+            autoLayout lr
+        }
+
+        dynamic enrollmentSystem {
+            // TODO
+            // authentication
+            title "Core feature 7: Teacher adds an enrollment condition to his course"
+            description "Case when the condition which teacher tries to add is valid."
+            teacher -> enrollmentPresenter "Requests management of his course"
+            enrollmentPresenter -> enrollmentManager "Requests course management for the teacher"
+            enrollmentManager -> courseDatabase "Fetches courses taught by the teacher"
+            # TODO
+            # tady nesedí, asi enrollmentManager ovlivní enrollmentPresenter
+            # avšak z L2 se tohle neděje
+            teacher -> enrollmentPresenter "Requests management of the course"
+            enrollmentPresenter -> enrollmentManager "Requests the course management for the teacher"
+            enrollmentManager -> courseDatabase "Fetches the course data"
+            # TODO
+            # analogické předchozímu todo-čku
+            teacher -> enrollmentPresenter "Requests edition of the course enrollment condition"
+            enrollmentPresenter -> enrollmentManager "Requests edition of the course enrollment condition for the teacher"
+            enrollmentManager -> courseDatabase "Fetches the current course enrollment conditions"
+            enrollmentManager -> courseDatabase "Fetches the available course enrollment condition types"
+            # TODO
+            # analogické předchozímu todo-čku
+            teacher -> enrollmentPresenter "Requests to add new course enrollment condition"
+            enrollmentPresenter -> enrollmentManager "Requests to add new course enrollment condition for the teacher"
+            enrollmentManager -> studentDatabase "Fetches data about directly affective students by this change"
+            # TODO
+            # analogické předchozímu todo-čku
+            teacher -> enrollmentPresenter "Requests to save the new course enrollment condition"
+            enrollmentPresenter -> enrollmentManager "Requests to save the new course enrollment condition for the course"
+            enrollmentManager -> courseDatabase "Add the new course enrollment condition for the course"
+            enrollmentManager -> notificationService "Request course enrollment condition added successfully message for the teacher"
+            notificationService -> sisMessenger "Request course enrollment condition added successfully message for the teacher"
+            # unenroll students, which fail to pass the new course enrollmenta condition
+            enrollmentManager -> courseDatabase "Remove student(s) from the course enrollment list"
+            enrollmentManager -> studentDatabase "Remove the course from enrolled student list"
+            enrollmentManager -> notificationService "Request course enrollment cancellation due to change in course enrollment condition for student(s)"
+            notificationService -> sisMessenger "Request course enrollment cancellation due to change in course enrollment condition for student(s)"
+            # TODO
+            # není tohle redundatní čtení z dabáze - úplně bych vynechal
+            enrollmentManager -> courseDatabase "Fetches course enrollment condition for the course"
+            # TODO
+            # enrollmentManager by mělo změnit prezentovaný stav uživateli
+
+            autoLayout lr
+        }
+
         component enrollmentManager "enrollmentManagerComponeentDiagram" {
             include *
         }
@@ -387,7 +495,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         component coursePresenter "coursePresenterComponentDiagram" {
             include *
         }
-        
+
         component statisticsPresenter "statisticsPresenterComponentDiagram" {
             include *
         }
