@@ -298,46 +298,46 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         deploymentEnvironment "Production" {
             deploymentNode "User's web browser" "" "" {
-                enrollmentPresenterInstance = containerInstance enrollmentPresenter
-                coursePresenterInstance = containerInstance coursePresenter
-                statisticsPresenterInstance = containerInstance statisticsPresenter
-                conditionsPresenterInstance = containerInstance conditionsPresenter
-                studentPresenterInstance = containerInstance studentPresenter
-                sisMessengerInstance = containerInstance sisMessenger
+                containerInstance enrollmentPresenter
+                containerInstance coursePresenter
+                containerInstance statisticsPresenter
+                containerInstance conditionsPresenter
+                containerInstance studentPresenter
+                containerInstance sisMessenger
             }
 
             deploymentNode "Notification server" "" "" {
-                notificationServiceInstance = containerInstance notificationService
+                containerInstance notificationService
             }
 
             deploymentNode "Enrollment server" "" "" {
-                enrollmentManagerInstance = containerInstance enrollmentManager
+                containerInstance enrollmentManager
             }
 
             deploymentNode "Conditions server" "" "" {
-                conditionsManagerInstance = containerInstance conditionsManager
+                containerInstance conditionsManager
             }
 
             deploymentNode "Statistics server" "" "" {
-                statisticsEngineInstance = containerInstance statisticsEngine
+                containerInstance statisticsEngine
             }
         }
 
         deploymentEnvironment "Development" {
             deploymentNode "User's web browser" "" "" {
-                enrollmentPresenterInstance = containerInstance enrollmentPresenter
-                coursePresenterInstance = containerInstance coursePresenter
-                statisticsPresenterInstance = containerInstance statisticsPresenter
-                conditionsPresenterInstance = containerInstance conditionsPresenter
-                studentPresenterInstance = containerInstance studentPresenter
-                sisMessengerInstance = containerInstance sisMessenger
+                containerInstance enrollmentPresenter
+                containerInstance coursePresenter
+                containerInstance statisticsPresenter
+                containerInstance conditionsPresenter
+                containerInstance studentPresenter
+                containerInstance sisMessenger
             }
 
-            deploymentNode "Backend server" "" "" {
-                notificationServiceInstance = containerInstance notificationService
-                enrollmentManagerInstance = containerInstance enrollmentManager
-                conditionsManagerInstance = containerInstance conditionsManager
-                statisticsEngineInstance = containerInstance statisticsEngine
+            deploymentNode "Back end server" "" "" {
+                containerInstance notificationService
+                containerInstance enrollmentManager
+                containerInstance conditionsManager
+                containerInstance statisticsEngine
             }
         }
 
