@@ -205,6 +205,50 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             autoLayout lr
         }
 
+        dynamic EnrollmentManager {
+            title "Core feature 7: Teacher adds an enrollment condition to his course"
+            description "Case when the condition which teacher tries to add is valid."
+            teacher -> enrollmentPresenter "Requests management of his course"
+            enrollmentPresenter -> enrollmentAPI "Requests course management for the teacher"
+            enrollmentAPI -> courseDatabase "Fetches courses taught by the teacher"
+            # TODO
+            # tady nesedí, asi enrollmentAPI ovlivní enrollmentPresenter
+            # avšak z L2 se tohle neděje
+            teacher -> enrollmentPresenter "Requests management of the course"
+            enrollmentPresenter -> enrollmentAPI "Requests the course management for the teacher"
+            enrollmentAPI -> courseDatabase "Fetches the course data"
+            # TODO
+            # analogické předchozímu todo-čku
+            teacher -> enrollmentPresenter "Requests edition of the course enrollment condition"
+            enrollmentPresenter -> enrollmentAPI "Requests edition of the course enrollment condition for the teacher"
+            enrollmentAPI -> courseDatabase "Fetches the current course enrollment conditions"
+            enrollmentAPI -> courseDatabase "Fetches the available course enrollment condition types"
+            # TODO
+            # analogické předchozímu todo-čku
+            teacher -> enrollmentPresenter "Requests to add new course enrollment condition"
+            enrollmentPresenter -> enrollmentAPI "Requests to add new course enrollment condition for the teacher"
+            enrollmentAPI -> studentDatabase "Fetches data about directly affective students by this change"
+            # TODO
+            # analogické předchozímu todo-čku
+            teacher -> enrollmentPresenter "Requests to save the new course enrollment condition"
+            enrollmentPresenter -> enrollmentAPI "Requests to save the new course enrollment condition for the course"
+            enrollmentAPI -> courseDatabase "Add the new course enrollment condition for the course"
+            enrollmentAPI -> notificationService "Request course enrollment condition added successfully message for the teacher"
+            notificationService -> sisMessenger "Request course enrollment condition added successfully message for the teacher"
+            # unenroll students, which fail to pass the new course enrollmenta condition
+            enrollmentAPI -> courseDatabase "Remove student(s) from the course enrollment list"
+            enrollmentAPI -> studentDatabase "Remove the course from enrolled student list"
+            enrollmentAPI -> notificationService "Request course enrollment cancellation due to change in course enrollment condition for student(s)"
+            notificationService -> sisMessenger "Request course enrollment cancellation due to change in course enrollment condition for student(s)"
+            # TODO
+            # není tohle redundatní čtení z dabáze - úplně bych vynechal
+            enrollmentAPI -> courseDatabase "Fetches course enrollment condition for the course"
+            # TODO
+            # enrollmentAPI by mělo změnit prezentovaný stav uživateli
+
+            autoLayout lr
+        }
+
 
         theme default
 
