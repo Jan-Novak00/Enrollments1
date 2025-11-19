@@ -154,8 +154,25 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             enrollmentAPI -> courseDatabase "Fetches the course enrollment conditions"
             enrollmentAPI -> courseDatabase "Updates enrolled student list"
             enrollmentAPI -> studentDatabase "Adds the course in the student's course list"
-            enrollmentAPI -> notificationService "Triggers notification of the student successful enrollment into the course"
+            enrollmentAPI -> notificationService "Triggers notification about the student successful enrollment into the course"
             notificationService -> sisMessenger "Requests to show enrollment success message to the student"
+            autoLayout lr
+        }
+
+        dynamic EnrollmentManager {
+            title "Core feature 2: Student cancels own enrollment in a course"
+            description "The student requests course enrollment cancellation for a course, which enrollment cancellation conditions has been met."
+            student -> enrollmentPresenter "Requests enrollment course cancellation"
+            enrollmentPresenter -> enrollmentAPI "Requests the student enrollment course cancellation"
+            enrollmentAPI -> notificationService "Requests confirmation message about course enrollment cancellation"
+            notificationService -> sisMessenger "Requests to show confirmation message about course enrollment cancellation message to the student"
+            student -> enrollmentPresenter "Confirms enrollment course cancellation"
+            enrollmentPresenter -> enrollmentAPI "Confirms the student enrollment course cancellation"
+            enrollmentAPI -> courseDatabase "Fetches the course enrollment cancellation conditions"
+            enrollmentAPI -> courseDatabase "Updates enrolled student list"
+            enrollmentAPI -> studentDatabase "Remove the course from the student's course list"
+            enrollmentAPI -> notificationService "Triggers notification about the student successful course enrollment cancellation"
+            notificationService -> sisMessenger "Requests to show course enrollment cancellation success message to the student"
             autoLayout lr
         }
 
