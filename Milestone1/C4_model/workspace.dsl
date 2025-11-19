@@ -147,7 +147,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         }
 
         dynamic EnrollmentManager {
-            title "Core feature 1: Student enroll himself in a course"
+            title "Core feature 1: Student enrolls himself in a course"
             description "The student meets all course conditions and the course capacity has not yet been filled."
             student -> enrollmentPresenter "Requests enrollment in a course"
             enrollmentPresenter -> enrollmentAPI "Requests the student enrollment in the course"
