@@ -176,6 +176,35 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
             autoLayout lr
         }
 
+        dynamic EnrollmentManager {
+            title "Core feature 5: Study department officer enrolls a student"
+            studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a student in a course"
+            enrollmentPresenter -> enrollmentAPI "Requests a student enrollment for a course"
+            enrollmentAPI -> studentDatabase "Requests a list of students"
+            # TODO
+            # tady nesedí, asi enrollmentAPI ovlivní enrollmentPresenter
+            # avšak z L2 se tohle neděje
+            studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a concrete student in a course"
+            enrollmentPresenter -> enrollmentAPI "Requests enrollment of the student in a course"
+            enrollmentAPI -> studentDatabase "Requests the student data"
+            # TODO
+            # stejný problém jako předchozí todo-čko
+            # TODO
+            # někde by se mělo stát
+            # enrollmentAPI -> courseDatabaser "Fetches data about enrollable courses"
+            # avšak v feature_breakdown není definováno kdy
+            studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of the student in a concrete course"
+            enrollmentPresenter -> enrollmentAPI "Requests enrollment of the student in the course"
+            enrollmentAPI -> notificationService "Requests confirmation message about course enrollment"
+            notificationService -> sisMessenger "Requests to show confirmation message about course enrollment to the study department officer"
+            studyDepartmentOfficer -> enrollmentPresenter "Confirms course enrollment"
+            enrollmentPresenter -> enrollmentAPI "Requests (confirmed) enrollment of the student in the course"
+            enrollmentAPI -> courseDatabase "Update course enrollment list"
+            enrollmentAPI -> studentDatabase "Update enrolled courses for the student"
+            enrollmentAPI -> notificationService "Requests message about the course enrollment for the student"
+            autoLayout lr
+        }
+
 
         theme default
 
