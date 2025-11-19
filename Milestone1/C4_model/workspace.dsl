@@ -1,4 +1,4 @@
-workspace "EnrollmentManager workspace" "This workspace documents the architecture of the EnrollmentManager system, a part of a student information system that handles student enrollments." {
+workspace "EnrollmentSystem workspace" "This workspace documents the architecture of the Enrollment system, a part of a student information system that handles student enrollments." {
 
     model {
 
@@ -147,7 +147,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         #teacher -> dashboard "Uses dashboard to set enrollment conditions for their course and enroll and unenroll students."
         #studyDepartmentOfficer -> dashboard "Uses dashboard to enroll and unenroll students in exceptional situations."
 
-        # relationships between external systems and enrollmentManager
+        # relationships between external systems and enrollmentSystem
         enrollmentSystem -> scheduleModule "Makes API calls to read current schedule for a course from"
 
         enrollmentSystem -> studentDatabase "Reads information about students from"
@@ -165,7 +165,6 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         sso -> conditionsPresenter "Verifies user"
         sso -> statisticsPresenter "Verifies user"
         sso -> studentPresenter "Verifies user"
-
 
 
 
@@ -211,7 +210,7 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dashboard -> enrollmentPresenter "Delivers to the user's web browser."
         dashboard -> sisMessenger "Delivers to the users's web browser."
 
-ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
+        ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
         ticketCapacityHandler -> enrollmentWriter "On success: update enrolled roster"
         ticketCapacityHandler -> scheduleWriter "On success: update schedule"
         ticketCapacityHandler -> autoEnroll "On full: push to waiting list"
@@ -342,7 +341,7 @@ ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
             }
         }
 
-        !docs Docs
+        #!docs Docs
     }
 
     views {
