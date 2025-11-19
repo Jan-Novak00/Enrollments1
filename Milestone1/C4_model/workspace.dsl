@@ -149,6 +149,14 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dynamic EnrollmentManager {
             title "Core feature 1: Student enrolls himself in a course"
             description "The student meets all course conditions and the course capacity has not yet been filled."
+            student -> authenticator "The user request authentication"
+            # TODO
+            # I don't understand the meaing of the user database
+            # at least at this context
+            authenticator -> userDatabase "Fechtes authetication data about the user"
+            authenticator -> sso "Request the user authentication"
+            # TODO
+            # should authenticator update presenter???
             student -> enrollmentPresenter "Requests enrollment in a course"
             enrollmentPresenter -> enrollmentAPI "Requests the student enrollment in the course"
             enrollmentAPI -> courseDatabase "Fetches the course enrollment conditions"
@@ -162,6 +170,14 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dynamic EnrollmentManager {
             title "Core feature 2: Student cancels own enrollment in a course"
             description "The student requests course enrollment cancellation for a course, which enrollment cancellation conditions has been met."
+            student -> authenticator "The user request authentication"
+            # TODO
+            # I don't understand the meaing of the user database
+            # at least at this context
+            authenticator -> userDatabase "Fechtes authetication data about the user"
+            authenticator -> sso "Request the user authentication"
+            # TODO
+            # should authenticator update presenter???
             student -> enrollmentPresenter "Requests enrollment course cancellation"
             enrollmentPresenter -> enrollmentAPI "Requests the student enrollment course cancellation"
             enrollmentAPI -> notificationService "Requests confirmation message about course enrollment cancellation"
@@ -178,6 +194,15 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
 
         dynamic EnrollmentManager {
             title "Core feature 5: Study department officer enrolls a student"
+            # TODO uncomment
+            #studyDepartmentOfficer -> authenticator "The user request authentication"
+            # TODO
+            # I don't understand the meaing of the user database
+            # at least at this context
+            authenticator -> userDatabase "Fechtes authetication data about the user"
+            authenticator -> sso "Request the user authentication"
+            # TODO
+            # should authenticator update presenter???
             studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a student in a course"
             enrollmentPresenter -> enrollmentAPI "Requests a student enrollment for a course"
             enrollmentAPI -> studentDatabase "Requests a list of students"
@@ -208,6 +233,14 @@ workspace "EnrollmentManager workspace" "This workspace documents the architectu
         dynamic EnrollmentManager {
             title "Core feature 7: Teacher adds an enrollment condition to his course"
             description "Case when the condition which teacher tries to add is valid."
+            teacher -> authenticator "The user request authentication"
+            # TODO
+            # I don't understand the meaing of the user database
+            # at least at this context
+            authenticator -> userDatabase "Fechtes authetication data about the user"
+            authenticator -> sso "Request the user authentication"
+            # TODO
+            # should authenticator update presenter???
             teacher -> enrollmentPresenter "Requests management of his course"
             enrollmentPresenter -> enrollmentAPI "Requests course management for the teacher"
             enrollmentAPI -> courseDatabase "Fetches courses taught by the teacher"
