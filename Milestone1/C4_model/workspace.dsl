@@ -140,9 +140,9 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         student = person "Student" "Manages their own course enrollments."
         teacher = person "Teacher" "Manages enrollment conditions for their courses and occasionally student enrollments."
         studyDepartmentOfficer = person "Study Department Officer" "Manages student enrollments in exceptional situations."
-        maneger = person "Maneger" "Manages courses."
+        manager = person "Manager" "Manages courses."
 
-        # relationships between users and HealthTracker
+        # relationships between users and EnrollmentSystem
         #student -> dashboard "Uses dashboard to enroll in and unenroll from courses, view their enrollments and sign up to waiting lists."
         #teacher -> dashboard "Uses dashboard to set enrollment conditions for their course and enroll and unenroll students."
         #studyDepartmentOfficer -> dashboard "Uses dashboard to enroll and unenroll students in exceptional situations."
@@ -158,7 +158,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         sso -> enrollmentSystem  "Verifies users' identities."
 
-        maneger -> enrollmentSystem "Maneges available courses."
+        manager -> enrollmentSystem "Manages available courses."
 
         sso -> sisMessenger "Verifies user"
         sso -> enrollmentPresenter "Verifies user"
