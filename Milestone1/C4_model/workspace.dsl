@@ -14,9 +14,9 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
                 }
 
             }
-            
+
             enrollmentManager = container "Enrollment Manager" "Container for ticket management. Manages enrollment, unenrollment and waiting lists." {
-               
+
                 enrollmentAPI = component "Enrollment API" "Handles requests for enrollment/unenrollment"
                 ticketCapacityHandler = component "Ticket Capacity Handler"
                 ticketStore = component "Ticket Store Adapter"¨
@@ -191,7 +191,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         statisticsDataFetcher -> courseDatabase "Fetches data"
         statisticsQueryController -> statisticsAPI "Requests statistics."
-        maneger -> statisticsPresenter "Views statistics."
+        manager -> statisticsPresenter "Views statistics."
 
         conditionsPresenter -> conditionAPI "Requests conditions and changes them."
         teacher -> conditionsPresenter "Sets/views conditions."
@@ -356,7 +356,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
             include student
             include teacher
             include studyDepartmentOfficer
-            include maneger
+            include manager
         }
         container enrollmentSystem "enrollmentSystemContainerDiagram" {
             include *
