@@ -1,4 +1,4 @@
-### Feature: Enrolling in lectures and practicals
+### Feature: Student enrollment in lectures and practicals
 
 As a student, I need to be able to enroll myself to a specific lecture and practical so I can join the course.
 

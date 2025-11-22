@@ -1,4 +1,4 @@
-### Feature: Student enrolment cancellation
+### Feature: Student enrollment cancellation
 As a student, I need to be able to cancel my enrolment to lecture and practical so I can change my mind about my study.
 
 #### Feature breakdown
