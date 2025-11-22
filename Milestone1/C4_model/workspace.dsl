@@ -155,6 +155,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         sso -> enrollmentSystem  "Verifies users' identities."
 
+        dashboard -> enrollmentSystem "Delivers presenters to the user's web browser."
 
         # Container relationships
 
