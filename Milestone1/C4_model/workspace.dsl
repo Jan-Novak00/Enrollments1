@@ -73,9 +73,8 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
                 courseTicketController = component "Course ticket controller"
                 waitingListController = component "Waiting list controller"
-
-
             }
+
             coursePresenter = container "Course Presenter" "Presents course info." {
                 tags "Front end"
                 courseSearchView = component "Course search" {
@@ -140,12 +139,12 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         student = person "Student" "Manages their own course enrollments."
         teacher = person "Teacher" "Manages enrollment conditions for their courses and occasionally student enrollments."
         studyDepartmentOfficer = person "Study Department Officer" "Manages student enrollments in exceptional situations."
-        manager = person "Manager" "Manages courses."
+        manager = person "Manager" "Views course statistics."
 
         # relationships between users and EnrollmentSystem
-        #student -> dashboard "Uses dashboard to enroll in and unenroll from courses, view their enrollments and sign up to waiting lists."
-        #teacher -> dashboard "Uses dashboard to set enrollment conditions for their course and enroll and unenroll students."
-        #studyDepartmentOfficer -> dashboard "Uses dashboard to enroll and unenroll students in exceptional situations."
+        student -> enrollmentSystem "Enrolls in and unenrolls from courses, views their enrollments and signs up to waiting lists."
+        teacher -> enrollmentSystem "Sets enrollment conditions for their course and enrolls and unenrolls students."
+        studyDepartmentOfficer -> enrollmentSystem "Enrolls and unenrolls students in exceptional situations."
 
         # relationships between external systems and enrollmentSystem
         enrollmentSystem -> scheduleModule "Makes API calls to read current schedule for a course from"
@@ -154,11 +153,35 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         enrollmentSystem -> courseDatabase "Reads information about courses from"
 
-        dashboard -> enrollmentSystem "Manages enrollments on behalf of users using"
-
         sso -> enrollmentSystem  "Verifies users' identities."
 
-        manager -> enrollmentSystem "Manages available courses."
+
+        # Container relationships
+
+        # Context relationships         
+
+        student -> sisMessenger "Views messages"
+        teacher -> sisMessenger "Views messages"
+
+        student -> enrollmentPresenter "Enrolls (unenrolls) to (from) the course."
+        teacher -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
+        studyDepartmentOfficer -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
+
+        teacher -> conditionsPresenter "Sets/views conditions."
+        studyDepartmentOfficer -> conditionsPresenter "Views conditions."
+
+        student -> coursePresenter "Views available courses and their info."
+
+        manager -> statisticsPresenter "Views statistics."
+
+        enrollmentManager -> courseDatabase "Updates waiting list."
+        enrollmentManager -> courseDatabase "Updates enrolled student list."
+        enrollmentManager -> courseDatabase "Views conditions."
+
+        enrollmentManager -> studentDatabase "Updates schedule."
+        enrollmentManager -> studentDatabase "Views student data."
+
+        coursePresenter -> courseDatabase "Requests course data."
 
         sso -> sisMessenger "Verifies user"
         sso -> enrollmentPresenter "Verifies user"
@@ -166,135 +189,124 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         sso -> statisticsPresenter "Verifies user"
         sso -> studentPresenter "Verifies user"
 
-
-
-        # Container relationships
-        autoEnroll -> notificationService "Triggeres notificiation when waiting status changes."
-        enrollmentManager -> courseDatabase "Updates waiting list."
-
-        enrollmentManager -> courseDatabase "Updates enrolled student list."
-        enrollmentManager -> studentDatabase "Updates schedule."
-
-        enrollmentManager -> studentDatabase "Views student data."
-        enrollmentManager -> courseDatabase "Views conditions."
-
-        conditionSchemaDatabase -> courseDatabase "Sets/removes conditions."
-
-        notificationService -> sisMessenger "Updates messages"
-        student -> sisMessenger "Views messages"
-        teacher -> sisMessenger "Views messages"
-
-        enrollmentPresenter -> enrollmentAPI "Requests changes in enrollment."
-        student -> enrollmentPresenter "Enrolls (unenrolls) to (from) the course."
-        teacher -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
-        studyDepartmentOfficer -> enrollmentPresenter "Enrolls (unenrolls) student to (from) the course."
-
-        statisticsDataFetcher -> courseDatabase "Fetches data"
-        statisticsQueryController -> statisticsAPI "Requests statistics."
-        manager -> statisticsPresenter "Views statistics."
-
-        conditionsPresenter -> conditionAPI "Requests conditions and changes them."
-        teacher -> conditionsPresenter "Sets/views conditions."
-        studyDepartmentOfficer -> conditionsPresenter "Views conditions."
-
-        teacher -> studentPresenter "Views student info."
-        studyDepartmentOfficer -> studentPresenter "Views student info."
-        studentPresenter -> studentDatabase "Fetches data from the database."
-
-        student -> coursePresenter "Views available courses and their info."
-        coursePresenter -> courseDatabase "Requests course data."
-
         dashboard -> coursePresenter "Delivers to the user's web browser."
         dashboard -> studentPresenter "Delivers to the user's web browser."
         dashboard -> conditionsPresenter "Delivers to the user's web browser."
         dashboard -> enrollmentPresenter "Delivers to the user's web browser."
         dashboard -> sisMessenger "Delivers to the users's web browser."
 
+        # System relationships
+
+        notificationService -> sisMessenger "Updates messages"
+
+        statisticsQueryController -> statisticsAPI "Requests statistics."
+
+        conditionsPresenter -> conditionAPI "Requests conditions and changes them."
+
+        waitingListController -> enrollmentManager "Requests waiting list update"
+        courseTicketController -> enrollmentManager "Requests (un)enrollment"
+
+        conditionListController -> conditionAPI "Request conditions info"
+        conditionSetterContoller -> conditionAPI "Requests conditions change"
+
+        autoEnroll -> notificationService "Triggeres notificiation when waiting status changes."
+        notificationService -> messageController "Pushes messages"
+
+        # Enrollemnt Manager components
+        ticketStore -> courseDatabase "R/W ticket records"
+        condSchemaDatabase -> courseDatabase "Fetch course conditions"
+        waitQueue -> courseDatabase "Persist queue state"
+
+        scheduleWriter -> studentDatabase "Update schedule entries"
+        enrollmentWriter -> studentDatabase "Update student course list"
+        condEvaluator -> studentDatabase "Fetch student attributes"
+
+        enrollmentPresenter -> enrollmentAPI "Requests changes in enrollment."
+
+
         ticketCapacityHandler -> ticketStore "Read capacity/enrolled; write increments"
         ticketCapacityHandler -> enrollmentWriter "On success: update enrolled roster"
         ticketCapacityHandler -> scheduleWriter "On success: update schedule"
         ticketCapacityHandler -> autoEnroll "On full: push to waiting list"
-        ticketStore -> courseDatabase "R/W ticket records"
-        enrollmentWriter -> studentDatabase "Update student course list"
-        scheduleWriter -> studentDatabase "Update schedule entries"
 
-        # Enrollemnt Manager components
         autoEnroll -> waitQueue "Update waiting list"
-        waitQueue -> courseDatabase "Persist queue state"
         autoEnroll -> ticketStore "Update tickets when pop."
 
         enrollmentAPI -> ticketCapacityHandler "Request (un)enrollment."
         enrollmentAPI -> autoEnroll "Request removal from waiting list."
         ticketCapacityHandler -> autoEnroll "Request waiting list update when user unenrolls."
 
-
         ticketCapacityHandler -> condEvaluator "Check conditions"
         condReader -> condSchemaDatabase "Fetch conditions."
         condEvaluator -> condReader "Fetch condition graph"
         condEvaluator -> predicateLib "Invoke predicates (GPA, credits, role, time windows)"
-        condEvaluator -> studentDatabase "Fetch student attributes"
-        condSchemaDatabase -> courseDatabase "Fetch course conditions"
 
 
-        # Statistics Engine
+        # Statistics Engine components
+        statisticsDataFetcher -> courseDatabase "Fetches data"
+
         statisticsAPI -> statisticsCalculator "Requests calculation"
         statisticsCalculator -> statisticsDataFetcher "Requests data fetch"
         statisticsLibrary -> statisticsCalculator "Provides statistical methods."
         statisticsCalculator -> statisticsCache "Updates"
         statisticsCalculator -> statisticsCache "Reads"
 
-        # Enrollment Presenter
-        waitingListController -> enrollmentManager "Requests waiting list update"
-        courseTicketController -> enrollmentManager "Requests (un)enrollment"
-        waitingListView -> waitingListController "Handles waiting list requests"
-        courseTicketView -> courseTicketController "Handles (un)enrollment requests."
-
+        # Enrollment Presenter components 
         dashboard -> courseTicketView "delivers"
         dashboard -> waitingListView "delivers"
 
-        # Course Presenter
+        waitingListView -> waitingListController "Handles waiting list requests"
+        courseTicketView -> courseTicketController "Handles (un)enrollment requests."
+
+        # Course Presenter components
         dashboard -> courseSearchView "delivers"
         dashboard -> courseOverviewView "delivers
+
         courseSearchController -> courseDatabase "Fetches available courses based on user filters."
-        courseSearchView -> courseSearchController "Requests course list"
-        courseOverviewView -> courseOverviewController "Requests course data"
         courseOverviewController -> courseDatabase "Fetches course data"
 
-        # Statistics view
+        courseSearchView -> courseSearchController "Requests course list"
+        courseOverviewView -> courseOverviewController "Requests course data"
+        
+        # Statistics Presenter components
         statisticsQueryView -> statisticsQueryController "Sets statistics to be calculated"
 
-        # Condition Presenter
-        conditionListView -> conditionListController "Request conditions"
-        conditionListController -> conditionAPI "Request conditions info"
-        conditionSetterContoller -> conditionAPI "Requests conditions change"
-        conditionSetterView -> conditionSetterContoller "Requests condition change"
+        # Conditions Presenter components
         dashboard -> conditionListView "Delivers"
         dashboard -> conditionSetterView "Delivers"
 
-        # Student Presenter
-        studentInfoView -> studentInfoController "Gets data about student"
+        conditionListView -> conditionListController "Request conditions"
+        conditionSetterView -> conditionSetterContoller "Requests condition change"
+
+        # Student Presenter components
         studentInfoController -> studentDatabase "Fetches data from databse"
-        studentSearchView -> studentSearchController "Gets data about students"
         studentSearchController -> studentDatabase "Fetches data about students"
-        dashboard  -> studentInfoView "Delivers"
+        dashboard -> studentInfoView "Delivers"
         dashboard -> studentSearchView "Delivers"
+
+        studentInfoView -> studentInfoController "Gets data about student"
+        studentSearchView -> studentSearchController "Gets data about students"
 
         # SIS Messenger
         dashboard -> messageView "Delivers"
+        
         messageView -> messageController "Gets messages"
-        notificationService -> messageController "Pushes messages"
 
         # Notification Service
-        channelDispatcher -> templateEngine "Render message"
-        channelDispatcher -> mailingListManager "Publish to mailing lists"
-        channelDispatcher -> notificationDatabase "Write delivery logs"
         channelDispatcher -> studentDatabase "Lookup contact addresses"
         notificationDatabase -> studentDatabase "Stores and loads notifications and logs."
 
-        #Conditions manager
-        conditionAPI -> conditionSchemaDatabase "Create/Update/Delete condition definitions"
-        #conditionSchemaDatabase -> courseDatabase "R/W conditions"
+        channelDispatcher -> templateEngine "Render message"
+        channelDispatcher -> mailingListManager "Publish to mailing lists"
+        channelDispatcher -> notificationDatabase "Write delivery logs"
 
+        # Conditions manager
+        conditionSchemaDatabase -> courseDatabase "Sets/removes conditions."
+
+        conditionAPI -> conditionSchemaDatabase "Create/Update/Delete condition definitions"
+    
+
+        # Deployment environments
 
         deploymentEnvironment "Production" {
             deploymentNode "User's web browser" "" "" {
