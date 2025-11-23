@@ -1,5 +1,7 @@
 workspace "EnrollmentSystem workspace" "This workspace documents the architecture of the Enrollment system, a part of a student information system that handles student enrollments." {
 
+    !docs Docs
+
     model {
 
         # software systems
