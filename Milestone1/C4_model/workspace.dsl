@@ -387,8 +387,9 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         dynamic enrollmentSystem {
             title "Core feature 1: Student enrolls himself in a course"
-            description "The student meets all course conditions and the course capacity has not yet been filled."
+            description "The student meets all course conditions, the course capacity has not yet been filled and authentication was procceed successfully."
             sso -> enrollmentPresenter "Veriffies the student"
+            student -> enrollmentPresenter "Requests a course enrollment"
             enrollmentPresenter -> enrollmentManager "Requests the student enrollment in the course"
             enrollmentManager -> courseDatabase "Fetches the course enrollment conditions"
             enrollmentManager -> courseDatabase "Updates enrolled student list"
@@ -401,7 +402,6 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         dynamic enrollmentSystem {
             title "Core feature 2: Student cancels own enrollment in a course"
             description "The student requests course enrollment cancellation for a course, which enrollment cancellation conditions has been met."
-            sso -> enrollmentPresenter "Veriffies the student"
             student -> enrollmentPresenter "Requests enrollment course cancellation"
             enrollmentPresenter -> enrollmentManager "Requests the student enrollment course cancellation"
             enrollmentManager -> notificationService "Requests confirmation message about course enrollment cancellation"
@@ -418,22 +418,13 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         dynamic enrollmentSystem {
             title "Core feature 5: Study department officer enrolls a student"
-            sso -> enrollmentPresenter "Veriffies the study department officer"
             studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a student in a course"
             enrollmentPresenter -> enrollmentManager "Requests a student enrollment for a course"
             enrollmentManager -> studentDatabase "Requests a list of students"
-            # TODO
-            # tady nesedí, asi enrollmentManager ovlivní enrollmentPresenter
-            # avšak z L2 se tohle neděje
             studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a concrete student in a course"
             enrollmentPresenter -> enrollmentManager "Requests enrollment of the student in a course"
             enrollmentManager -> studentDatabase "Requests the student data"
-            # TODO
-            # stejný problém jako předchozí todo-čko
-            # TODO
-            # někde by se mělo stát
-            # enrollmentManager -> courseDatabaser "Fetches data about enrollable courses"
-            # avšak v feature_breakdown není definováno kdy
+            enrollmentManager -> courseDatabase "Fetches data about enrollable courses"
             studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of the student in a concrete course"
             enrollmentPresenter -> enrollmentManager "Requests enrollment of the student in the course"
             enrollmentManager -> notificationService "Requests confirmation message about course enrollment"
@@ -453,25 +444,16 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
             teacher -> enrollmentPresenter "Requests management of his course"
             enrollmentPresenter -> enrollmentManager "Requests course management for the teacher"
             enrollmentManager -> courseDatabase "Fetches courses taught by the teacher"
-            # TODO
-            # tady nesedí, asi enrollmentManager ovlivní enrollmentPresenter
-            # avšak z L2 se tohle neděje
             teacher -> enrollmentPresenter "Requests management of the course"
             enrollmentPresenter -> enrollmentManager "Requests the course management for the teacher"
             enrollmentManager -> courseDatabase "Fetches the course data"
-            # TODO
-            # analogické předchozímu todo-čku
             teacher -> enrollmentPresenter "Requests edition of the course enrollment condition"
             enrollmentPresenter -> enrollmentManager "Requests edition of the course enrollment condition for the teacher"
             enrollmentManager -> courseDatabase "Fetches the current course enrollment conditions"
             enrollmentManager -> courseDatabase "Fetches the available course enrollment condition types"
-            # TODO
-            # analogické předchozímu todo-čku
             teacher -> enrollmentPresenter "Requests to add new course enrollment condition"
             enrollmentPresenter -> enrollmentManager "Requests to add new course enrollment condition for the teacher"
             enrollmentManager -> studentDatabase "Fetches data about directly affective students by this change"
-            # TODO
-            # analogické předchozímu todo-čku
             teacher -> enrollmentPresenter "Requests to save the new course enrollment condition"
             enrollmentPresenter -> enrollmentManager "Requests to save the new course enrollment condition for the course"
             enrollmentManager -> courseDatabase "Add the new course enrollment condition for the course"
@@ -482,12 +464,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
             enrollmentManager -> studentDatabase "Remove the course from enrolled student list"
             enrollmentManager -> notificationService "Request course enrollment cancellation due to change in course enrollment condition for student(s)"
             notificationService -> sisMessenger "Request course enrollment cancellation due to change in course enrollment condition for student(s)"
-            # TODO
-            # není tohle redundatní čtení z dabáze - úplně bych vynechal
             enrollmentManager -> courseDatabase "Fetches course enrollment condition for the course"
-            # TODO
-            # enrollmentManager by mělo změnit prezentovaný stav uživateli
-
             autoLayout lr
         }
 
