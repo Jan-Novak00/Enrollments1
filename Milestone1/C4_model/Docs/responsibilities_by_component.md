@@ -295,3 +295,9 @@
 - Send waiting list notifications
 
 ---
+
+### Component: `notificationDatabase`
+- Store past notifications
+- Store notification logs
+- Load past notifications
+- Load notification logs
