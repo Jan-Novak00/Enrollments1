@@ -159,7 +159,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         # Container relationships
 
-        # Context relationships         
+        # Context relationships
 
         student -> sisMessenger "Views messages"
         teacher -> sisMessenger "Views messages"
@@ -252,7 +252,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         statisticsCalculator -> statisticsCache "Updates"
         statisticsCalculator -> statisticsCache "Reads"
 
-        # Enrollment Presenter components 
+        # Enrollment Presenter components
         dashboard -> courseTicketView "delivers"
         dashboard -> waitingListView "delivers"
 
@@ -268,7 +268,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         courseSearchView -> courseSearchController "Requests course list"
         courseOverviewView -> courseOverviewController "Requests course data"
-        
+
         # Statistics Presenter components
         statisticsQueryView -> statisticsQueryController "Sets statistics to be calculated"
 
@@ -290,7 +290,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         # SIS Messenger
         dashboard -> messageView "Delivers"
-        
+
         messageView -> messageController "Gets messages"
 
         # Notification Service
@@ -305,7 +305,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         conditionSchemaDatabase -> courseDatabase "Sets/removes conditions."
 
         conditionAPI -> conditionSchemaDatabase "Create/Update/Delete condition definitions"
-    
+
 
         # Deployment environments
 
@@ -388,8 +388,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         dynamic enrollmentSystem {
             title "Core feature 1: Student enrolls himself in a course"
             description "The student meets all course conditions and the course capacity has not yet been filled."
-            // TODO
-            // authentication
+            sso -> enrollmentPresenter "Veriffies the student"
             enrollmentPresenter -> enrollmentManager "Requests the student enrollment in the course"
             enrollmentManager -> courseDatabase "Fetches the course enrollment conditions"
             enrollmentManager -> courseDatabase "Updates enrolled student list"
@@ -402,8 +401,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         dynamic enrollmentSystem {
             title "Core feature 2: Student cancels own enrollment in a course"
             description "The student requests course enrollment cancellation for a course, which enrollment cancellation conditions has been met."
-            // TODO
-            // authentication
+            sso -> enrollmentPresenter "Veriffies the student"
             student -> enrollmentPresenter "Requests enrollment course cancellation"
             enrollmentPresenter -> enrollmentManager "Requests the student enrollment course cancellation"
             enrollmentManager -> notificationService "Requests confirmation message about course enrollment cancellation"
@@ -420,8 +418,7 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
 
         dynamic enrollmentSystem {
             title "Core feature 5: Study department officer enrolls a student"
-            // TODO
-            // authentication
+            sso -> enrollmentPresenter "Veriffies the study department officer"
             studyDepartmentOfficer -> enrollmentPresenter "Requests enrollment of a student in a course"
             enrollmentPresenter -> enrollmentManager "Requests a student enrollment for a course"
             enrollmentManager -> studentDatabase "Requests a list of students"
@@ -450,10 +447,9 @@ workspace "EnrollmentSystem workspace" "This workspace documents the architectur
         }
 
         dynamic enrollmentSystem {
-            // TODO
-            // authentication
             title "Core feature 7: Teacher adds an enrollment condition to his course"
             description "Case when the condition which teacher tries to add is valid."
+            sso -> enrollmentPresenter "Veriffies the teacher"
             teacher -> enrollmentPresenter "Requests management of his course"
             enrollmentPresenter -> enrollmentManager "Requests course management for the teacher"
             enrollmentManager -> courseDatabase "Fetches courses taught by the teacher"
