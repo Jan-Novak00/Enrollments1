@@ -67,7 +67,7 @@
 
 ![](embed:coursePresenterComponentDiagram)
 
-### Component: `courseSearchView`
+### Component: `courseSearch`
 - Display course search UI
 - Display list of matching courses
 
@@ -82,7 +82,7 @@
 
 ---
 
-### Component: `courseOverviewView`
+### Component: `courseOverview`
 - Display course data
 - Display student's enrolled courses
 
@@ -105,7 +105,7 @@
 
 ---
 
-### Component: `studentInfoController`
+### Component: `studentInfoComponent`
 - Fetch and cache student info
 - Fetch and cache list of enrolled courses
 
@@ -116,7 +116,7 @@
 
 ---
 
-### Component: `studentSearchController`
+### Component: `studentSearchComponent`
 - Fetch and cache students
 - Search students
 
@@ -204,7 +204,7 @@
 
 ---
 
-### Component: `ticketStore`
+### Component: `ticketStoreAdapter`
 - Fetch all tickets
 - Update waiting list
 - Detect existing enrollment
@@ -226,7 +226,7 @@
 
 ---
 
-### Component: `waitQueue`
+### Component: `waitQueueService`
 - Add student to queue
 - Set max waiting time
 - Get waiting list position
@@ -235,14 +235,14 @@
 
 ---
 
-### Component: `autoEnroll`
+### Component: `auto-EnrollWorker`
 - Remove students with exceeded waiting time
 - Auto-enroll first from waiting list
 - Trigger notifications
 
 ---
 
-### Component: `condReader`, `predicateLib`, `condEvaluator`
+### Component: `conditionReader`, `predicateLibrary`, `conditionEvaluator`
 - Verify prerequisites
 - Evaluate single/multiple conditions
 - Count satisfying/excluded students
@@ -256,7 +256,7 @@
 
 ![](embed:conditionsManagerComponentDiagram)
 
-### Component: `conditionAPI`
+### Component: `conditionManagementAPI`
 - Fetch teacher courses
 - Fetch/edit conditions
 - Fetch condition types
@@ -267,7 +267,7 @@
 
 ---
 
-### Component: `conditionSchemaDatabase`
+### Component: `conditionSchema`
 - Persist conditions
 - Provide canonical current conditions
 
