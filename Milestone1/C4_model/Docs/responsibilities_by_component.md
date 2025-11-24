@@ -1,9 +1,6 @@
 
 # Responsibilities Mapped to Containers and Components
 
-> This file maps **all responsibilities** from `responsibilities.md` to **containers and components** in the Enrollment System.
-> Sources: responsibilities.md and context.md.
-
 ---
 
 ## 1. Container: Enrollment Presenter
