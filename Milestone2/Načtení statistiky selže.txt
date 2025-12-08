@@ -1,0 +1,8 @@
+Zdroj: Manager (podává dotaz přes Results & History Page)
+Stimulus: databáze (exam database) neodpovídá
+Prostředí: Běžný stav
+Artifact: Results & History Page a statistics service
+Response: Retry, v případě nedostupnosti načíst data z cache (active redundancy)
+Measurment: 5s downtime
+
+Recovery: restart
