@@ -164,19 +164,24 @@ workspace "Exam Handling System" "C4 model for EXA project" {
                     containerInstance webApp
                 }
                 deploymentNode "App Pod" "Pod hosting the EXA application core." "Kubernetes Pod" {
-                    containerInstance appCore
+                    appCoreInstance = containerInstance appCore
                 }
                 deploymentNode "Worker Pod" "Pod hosting the EXA notification worker." "Kubernetes Pod" {
                     containerInstance notificationWorker
                 }
             }
             deploymentNode "DB Server" "Managed relational database" "PostgreSQL" {
-                containerInstance exaDb
+                exaDbMonitor = infrastructureNode "Exam DB Monitor" "Monitors access to the Exam Database. On read failure: retries once and logs the error if it still fails. On write failure: caches the write operation and retries later." "Runtime DB access monitor"
+        
+                exaDbInstance = containerInstance exaDb
             }
             deploymentNode "External systems" "Real external SIS and e-mail systems." "Managed external services" {
                 softwareSystemInstance sis
                 softwareSystemInstance mail
             }
+        
+            appCoreInstance -> exaDbMonitor "Reads from and writes to via" "JDBC"
+            exaDbMonitor    -> exaDbInstance "Executes DB operations with retry, logging and write caching" "JDBC"
         }
     }
 
