@@ -10,7 +10,7 @@ workspace "Exam Handling System" "C4 model for EXA project" {
         "structurizr.inspection.model.softwaresystem.documentation" "warning"
         "structurizr.inspection.model.softwaresystem.decisions"     "warning"
     }
-    
+
     model {
 
         // ---------------------------------------- People ----------------------------------------
@@ -71,6 +71,16 @@ workspace "Exam Handling System" "C4 model for EXA project" {
                 registrationsSchema = component "Registrations Schema" "Tables for student registrations."
                 resultsSchema       = component "Results Schema" "Tables for per-student credits and grades."
                 statsSchema         = component "Statistics Schema" "Derived and historical statistics."
+            }
+
+            // ----- Container: Secondary Database -----
+            exaDb2 = container "Secondary Exam Database" "Stores exam terms, registrations, rooms, credits, grades and statistics." "Relational database schema" {
+                tags "Database (secondary)"
+
+                examsSchemaSecondary         = component "Exam Terms Schema" "Tables for exam terms and assigned rooms."
+                registrationsSchemaSecondary = component "Registrations Schema" "Tables for student registrations."
+                resultsSchemaSecondary       = component "Results Schema" "Tables for per-student credits and grades."
+                statsSchemaSecondary         = component "Statistics Schema" "Derived and historical statistics."
             }
         }
 
@@ -159,6 +169,21 @@ workspace "Exam Handling System" "C4 model for EXA project" {
         }
 
         deploymentEnvironment "Production" {
+            deploymentNode "DB Server (Primary)" "Managed relational database" "PostgreSQL" {
+                exaDbPrimary = containerInstance exaDb
+            }
+
+            deploymentNode "DB Server (Secondary)" "Managed relational database" "PostgreSQL" {
+                exaDbSecondary = containerInstance exaDb2
+            }
+
+            deploymentNode "DB synchornizer"{
+                dbSynchronizer = infrastructureNode "Database Synchronizer" "" "Debezium" "availability"
+                dbSynchronizer -> exaDbPrimary "monitor for changes" "" "availability"
+                dbSynchronizer -> exaDbSecondary "update with changes" "" "availability"
+            }
+
+
             deploymentNode "Kubernetes Cluster" "Production app cluster" "Kubernetes" {
                 deploymentNode "Web Pod" "Pod hosting the EXA web application." "Kubernetes Pod" {
                     containerInstance webApp
@@ -170,12 +195,15 @@ workspace "Exam Handling System" "C4 model for EXA project" {
                     containerInstance notificationWorker
                 }
             }
-            deploymentNode "DB Server" "Managed relational database" "PostgreSQL" {
-                containerInstance exaDb
-            }
             deploymentNode "External systems" "Real external SIS and e-mail systems." "Managed external services" {
                 softwareSystemInstance sis
                 softwareSystemInstance mail
+            }
+            // ------------------------- Availibility quality----------------------------------------
+            deploymentNode "Application Monitor" {
+                monitor = infrastructureNode "Application monitor" "" "Zabbix" "availability"
+                monitor -> exaDbPrimary "" "" "availability"
+                monitor -> exaDbSecondary "" "" "availability"
             }
         }
     }
@@ -259,6 +287,9 @@ workspace "Exam Handling System" "C4 model for EXA project" {
 
             element "Database"  {
                 shape Cylinder
+            }
+            element "availability"  {
+                color #ff0000
             }
         }
     }
