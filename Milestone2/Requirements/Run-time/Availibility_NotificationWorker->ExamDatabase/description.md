@@ -21,5 +21,4 @@ After notification worker send a message it needs to log that the message was se
 - We have to introduce way to synchronize primary and secondary database.
 - We need to add functionality to Notification log component.
     - enable dynamicly switching database to writes logs.
-
-
+- Due to 24 hours limit we can afford to restore not responding database manually
