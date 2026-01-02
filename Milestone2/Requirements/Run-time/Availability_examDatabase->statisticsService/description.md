@@ -8,3 +8,8 @@
 
 ## More worldly description
 When statistics service tries to fetch data for the user and the database does not respond, the application has 15 seconds for retry and in the case of repeated error in reading data from the database, the application loads data from cache - it is not mission critical to aggregate statistical data from completely up-to-date data. Set timeframe is enough time to send another network request and in case of repeated error to send request to the cache.
+
+## Propose solution
+- We need a component "Database synchroniser" to synchronise primary and secondary database.
+- We must implement logic within the Statistics service that automatically redirects read queries to the secondary database if the primary database fails to respond.
+- We must implement retry mechanism in the Statistics service.
