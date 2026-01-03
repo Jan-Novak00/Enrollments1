@@ -2,10 +2,10 @@
 
 - *Source of stimulus:* School administrator
 - *Stimulus:* Changing to a different type of database
-- *Enviroment:* Design time
+- *Environment:* Design time
 - *Artifact:* Exam database
 - *Response:* The database being used is changed successfuly, all the data is transfered to the new database and the system keeps functioning normally during and after the change.
-- *Meassurement:* 6 man-months of development and testing
+- *Measurement:* 6 man-months of development and testing
 
 ## Story
 The old database, the school was using, becomes too expensive for the school, so the administrators want to switch to a different one that's cheaper.
