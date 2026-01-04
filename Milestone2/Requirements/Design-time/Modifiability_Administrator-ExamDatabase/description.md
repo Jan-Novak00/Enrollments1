@@ -8,7 +8,7 @@
 - *Measurement:* 6 man-months of development and testing
 
 ## Story
-The old database, the school was using, becomes too expensive for the school, so the administrators want to switch to a different one that's cheaper.
+The old database the school was using, becomes too expensive for the school, so the administrators want to switch to using a different cheaper one.
 
 ## Solution
 The architecture is already mostly prepared for this change. 
