@@ -3,13 +3,17 @@
 - *Stimulus:* Unable to load data from the database
 - *Environment:* Normal operation
 - *Artifact:* Exam database
-- *Response:* Retry and load data from secondary database
-- *Meassurement:* 15s downtime
+- *Response:* Load data from secondary database
+- *Meassurement:* use of secondary databse for at most 24 hours
 
 ## More worldly description
-When statistics service tries to fetch data for the user and the database does not respond, the application has 15 seconds for retry and in the case of repeated error in reading data from the database, the application loads data from secondary database - it is not mission critical to aggregate statistical data from completely up-to-date data. Set timeframe is enough time to send another network request and in case of repeated error to send request to the cache.
+When statistics service tries to fetch data for the user and the database times out, we have 24 hours to fix the problem. Meanwhile the system will fetch data from the secondary database and use those for statistical analysis. It is not mission critical to aggregate statistical data from completely up-to-date data, so it is fine to use slightly older data from the secondary database.
 
-## Propose solution
-- We need a component "Database synchroniser" to synchronise primary and secondary database.
-- We must implement logic within the Statistics service that automatically redirects read queries to the secondary database if the primary database fails to respond.
-- We must implement retry mechanism in the Statistics service.
+
+## Proposed solution
+- We need a component "Database synchroniser" to synchronise primary and secondary database and "Monitor" which will monitor database status
+    - When primary database is down, monitor will enforce synchonisation, swich primary and secondary database and inform statistical service of the change
+    - Database synchroniser ensures that primary and secondary databases are synchronised
+    - on L4 level in statistical service we need to provide new functionality (extend data fetching module) for database switching
+- When the primary database is down we can try to fix it in the next 24 hours, while the secondary database hides the fault from the user. Then we switch back to primary database.
+- We reuse the solution used in Availibility_NotificationWorker->ExamDatabase.
