@@ -142,6 +142,8 @@ workspace "Exam Handling System" "C4 model for EXA project" {
         roomReservationNotifier -> notificationLog "Writes notification log entry"           "In-process call / JDBC"
         resultNotifier          -> notificationLog "Writes notification log entry"           "In-process call / JDBC"
 
+        notificationLog -> exaDb "Writes notification log entry"                             "JDBC/SQL"
+
         // ---------------------------------------- Deployment environments (for 2 deployment diagrams) ----------------------------------------
         deploymentEnvironment "Dev/Test" {
             deploymentNode "Developer Laptop" "Local development or test environment" "Docker / local runtime" {
