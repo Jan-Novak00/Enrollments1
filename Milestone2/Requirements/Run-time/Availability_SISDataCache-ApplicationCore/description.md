@@ -1,6 +1,6 @@
 # Quality Requirement Scenario
 
-- *Source of stimulus:* Student (and teacher)
+- *Source of stimulus:* SIS
 - *Stimulus:* School Information System (SIS) becomes unavailable or responds too slowly (timeouts).
 - *Environment:* Normal operation (peak usage, e.g., exam-period week)
 - *Artifact:* Application Core (EXA)
