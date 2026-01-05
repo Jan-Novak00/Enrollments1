@@ -10,13 +10,6 @@
 ## Story
 The school starts receiving complaints that important last‑minute updates (example newly posted grades) are missed because students do not check e-mail frequently enough. Management decides to introduce an additional notification channel (for example SMS or mobile push notifications), while keeping the current e‑mail notifications.
 
-## Architectural flaw in `original_workspace.dsl`
-In the original design, each event-specific notifier (Registration Notifier, Room Reservation Notifier, Result Notifier) directly depends on:
-- the concrete delivery mechanism (**Email Sender**), and
-- persistence of delivery metadata (**Notification Log**).
-
-This creates a ripple effect: introducing a new channel would require changing multiple notifier components, increasing effort and risk.
-
 ## Solution
 Introduce a **Notification Dispatcher** component in the Notification Worker as an *intermediary* (a classic “reduce coupling” modifiability tactic):
 
